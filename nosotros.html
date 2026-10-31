@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FP Essentials | Nosotros</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Estilos personalizados base -->
+    <style>
+        :root {
+            --sceptre-red: #4D0E12;
+            --cerulean-blue: #A5BCD6;
+            --transparent-yellow: #F5EFC6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #FFFFFF;
+            color: #333333;
+        }
+
+        .title-script {
+            font-family: Georgia, serif;
+            font-style: italic;
+        }
+
+        .text-vino {
+            color: var(--sceptre-red) !important;
+        }
+
+        .bg-header {
+            background-color: var(--transparent-yellow);
+        }
+
+        .bg-footer {
+            background-color: var(--cerulean-blue);
+        }
+
+        .btn-hero {
+            background-color: var(--sceptre-red);
+            color: #ffffff !important;
+            border-radius: 50px;
+            padding: 0.6rem 1.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-hero:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .footer-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #333333;
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--sceptre-red);
+            text-decoration: underline;
+        }
+
+        .search-input {
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            border-right: none;
+        }
+
+        .search-btn {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-left: none;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+        }
+
+        .carousel-indicators [data-bs-target] {
+            background-color: var(--sceptre-red);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+        }
+        .style-stars {
+            font-size: 0.85rem;
+        }
+
+        .style-text-verified {
+            font-size: 0.75rem;
+        }
+
+        .style-btn-buy {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+        }
+
+        /* Ajuste de altura fija y uniforme para las tarjetas del carrusel de testimonios */
+        .testimonial-card {
+            height: 380px !important;
+        }
+        .testimonial-img {
+            height: 100px !important;
+            width: 100% !important;
+            object-fit: cover !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ENCABEZADO Y NAVEGACIÓN -->
+    <header class="bg-header py-3">
+        <div class="container">
+            <div class="row align-items-center mb-2">
+                <!-- Logotipo de la marca -->
+                <div class="col-6 col-md-3">
+                    <a href="index.html" class="text-decoration-none d-inline-block">
+                        <img src="img/logo.png" alt="FP Essentials Logo" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/120x40?text=LOGO'">
+                    </a>
+                </div>
+
+                <!-- Buscador de productos -->
+                <div class="col-12 col-md-6 order-3 order-md-2 mt-2 mt-md-0">
+                    <form class="d-flex" role="search" onsubmit="handleHeaderSearch(event)">
+                        <div class="input-group">
+                            <input id="headerSearchInput" class="form-control search-input px-3" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+                            <button class="btn search-btn text-muted px-3" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Iconos de interacción (Favoritos y Carrito homologados) -->
+                <div class="col-6 col-md-3 order-2 order-md-3 text-end">
+                    <!-- Favoritos con menú desplegable (Dropdown) -->
+                    <div class="dropdown d-inline-block me-2">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownFavoritos" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Favoritos">
+                            <i class="bi bi-heart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 fav-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownFavoritos" style="width: 300px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mis Favoritos</span>
+                                <i class="bi bi-heart-fill text-vino"></i>
+                            </li>
+                            <div id="fav-items-container">
+                                <p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <!-- Carrito de compras rectangular desplegable -->
+                    <div class="dropdown d-inline-block">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownCarrito" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Carrito">
+                            <i class="bi bi-bag"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 cart-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownCarrito" style="width: 380px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mi Carrito de Compras</span>
+                                <i class="bi bi-bag-check text-vino"></i>
+                            </li>
+                            <div id="cart-items-container">
+                                <p class="text-muted text-center py-2 small m-0">Tu carrito está vacío.</p>
+                            </div>
+                            
+                            <!-- Sección rectangular de Totales e I.V.A. -->
+                            <div id="cart-summary-container" class="border-top pt-2 mt-2 d-none">
+                                <div class="d-flex justify-content-between text-muted small mb-1">
+                                    <span>I.V.A. (16% incluido):</span>
+                                    <span id="cart-iva-amount">$0.00 MXN</span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold text-dark fs-6 mb-3">
+                                    <span>Total:</span>
+                                    <span id="cart-total-amount" class="text-vino">$0.00 MXN</span>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm w-100 rounded-pill fw-semibold shadow-sm" onclick="FPStore.checkoutWhatsApp()">
+                                    <i class="bi bi-whatsapp me-1"></i> Enviar pedido por WhatsApp
+                                </button>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menú de navegación principal -->
+            <nav class="navbar navbar-expand-md navbar-light p-0 pt-2 border-top border-secondary border-opacity-10">
+                <div class="container p-0">
+                    <button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Navegación">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                        <ul class="navbar-nav gap-md-5 text-center">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="index.html">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="tienda.html">Tienda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active fw-bold text-dark border-bottom border-2 border-dark px-2" href="nosotros.html">Nosotros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="ayuda.html">Ayuda</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        
+        <!-- 2. SECCIÓN PRINCIPAL: NUESTRA ESENCIA (ENMARCADA EN ROJO) -->
+        <section class="my-5 p-4 p-md-5 rounded-4 shadow-sm text-white" style="background-color: var(--sceptre-red);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-4 title-script text-white mb-3">Nuestra Esencia</h1>
+                    <p class="text-white-50 mb-3">
+                        En <strong class="text-white">FP Essentials</strong> creemos que el autocuidado no es solo una rutina, es un acto de amor propio. Nos dedicamos a seleccionar cuidadosamente cada producto de cosmetología, skincare y joyería fina para resaltar tu brillo natural todos los días.
+                    </p>
+                    <p class="text-white-50 mb-4">
+                        Cada kit está pensado para ofrecerte calidad, elegancia y funcionalidad, acompañándote en cada momento especial de tu vida con estándares excepcionales.
+                    </p>
+                    <a href="tienda.html" class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-dark shadow-sm">
+                        Descubre la tienda
+                    </a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="Img/banner-nosotros.jpeg" alt="Sobre nosotros" class="img-fluid rounded-4 shadow" onerror="this.src='https://via.placeholder.com/500x350?text=FP+Essentials+Team'">
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MISIÓN, VISIÓN Y VALORES -->
+        <section class="my-5 py-4">
+            <div class="text-center mb-5">
+                <h2 class="display-5 title-script text-vino">Nuestros Pilares</h2>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center" style="background-color: var(--transparent-yellow);">
+                        <div class="text-vino fs-1 mb-3"><i class="bi bi-heart-pulse"></i></div>
+                        <h3 class="h4 fw-bold text-dark mb-3">Misión</h3>
+                        <p class="text-muted small mb-0">Brindar productos de la más alta calidad en belleza, cuidado personal y joyería, permitiendo que cada persona exprese su autenticidad.</p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center text-white" style="background-color: var(--sceptre-red);">
+                        <div class="text-white fs-1 mb-3"><i class="bi bi-eye"></i></div>
+                        <h3 class="h4 fw-bold text-white mb-3">Visión</h3>
+                        <p class="text-white-50 small mb-0">Ser la marca líder de e-commerce en productos de autocuidado y accesorios, reconocida por la excelencia de nuestros kits.</p>
+                    </div>
+                </div>
+
+                <!-- Card Valores -->
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center" style="background-color: var(--cerulean-blue);">
+                        <div class="text-dark fs-1 mb-3"><i class="bi bi-stars"></i></div>
+                        <h3 class="h4 fw-bold text-dark mb-3">Valores</h3>
+                        <p class="text-dark opacity-75 small mb-0 text-start">
+                            <strong>• Autenticidad:</strong> Celebramos la belleza real y única de cada persona.<br><br>
+                            <strong>• Cuidado:</strong> Te brindamos atención cercana y una experiencia completa.<br><br>
+                            <strong>• Pasión por el detalle:</strong> Cuidamos desde la calidad del producto hasta el empaque.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CARRUSEL INTERACTIVO DE OPINIONES DE CLIENTES (ALTURA UNIFORME Y ROTACIÓN DE 6 SEGUNDOS) -->
+        <section class="my-5 py-5 rounded-4 px-3 px-md-4 shadow-sm" style="background-color: var(--cerulean-blue);">
+            <div class="text-center mb-5">
+                <h2 class="display-5 title-script text-vino">Lo que opinan nuestros clientes</h2>
+                <p class="text-muted small">Conoce las experiencias de quienes ya confían en nosotros y adquiere su producto favorito</p>
+            </div>
+
+            <div id="testimoniosCarousel" class="carousel slide pb-4" data-bs-ride="carousel" data-bs-interval="6000">
+                
+                <!-- Indicadores inferior (puntos) -->
+                <div class="carousel-indicators mb-0">
+                    <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Grupo 1"></button>
+                    <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="1" aria-label="Grupo 2"></button>
+                </div>
+
+                <div class="carousel-inner px-2 px-md-4">
+                    
+                    <!-- DIAPOSITIVA 1 (Primeras 3 opiniones) -->
+                    <div class="carousel-item active">
+                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                            
+                            <!-- Card 1 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "Los productos de skincare superaron mis expectativas. Mi piel se siente súper hidratada todo el día."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="img/mascarilla-arcilla.jpeg" alt="Skincare Kit" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=Skincare+Kit'">
+                                        <h6 class="fw-bold mb-0 text-vino">Sofía R.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "La joyería de acero y chapa de oro es hermosa. No pierde el brillo con el agua y los detalles son sumamente finos."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="img/esclava-infantil.jpeg" alt="Anillos Gold" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=Anillos+Gold'">
+                                        <h6 class="fw-bold mb-0 text-vino">Valeria M.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "Pedí un kit de regalo sorpresa y la presentación es hermosa. Llegó rapidísimo y excelente atención."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="img/kits-exclusivos.jpeg" alt="Kit Regalo" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=Kit+Regalo'">
+                                        <h6 class="fw-bold mb-0 text-vino">Daniela G.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- DIAPOSITIVA 2 (Siguientes 3 opiniones) -->
+                    <div class="carousel-item">
+                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                            
+                            <!-- Card 4 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "Me encantó el sérum facial, deja una textura suave y radiante desde el primer uso."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="img/sérum-vitamina.jpeg" alt="Sérum Facial" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=S%C3%A9rum+Facial'">
+                                        <h6 class="fw-bold mb-0 text-vino">Camila L.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 5 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "Las piezas de joyería son súper resistentes e ideales para el uso diario sin dañarse."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="Img/anillo-solitario.jpeg" alt="Collar Elegance" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=Collar+Gold'">
+                                        <h6 class="fw-bold mb-0 text-vino">Mariana P.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 6 -->
+                            <div class="col">
+                                <div class="card border-0 shadow-sm p-3 rounded-4 d-flex flex-column justify-content-between text-center testimonial-card">
+                                    <div>
+                                        <div class="text-warning mb-2 style-stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                        <p class="fst-italic text-dark small mb-3">
+                                            "Compré la caja de regalo para mi hermana y quedó fascinada con cada detalle de empaque."
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <img src="img/kits-exclusivos.jpeg" alt="Box Regalo" class="img-fluid rounded-3 mb-2 testimonial-img" onerror="this.src='https://via.placeholder.com/120x100?text=Box+Regalo'">
+                                        <h6 class="fw-bold mb-0 text-vino">Andrea K.</h6>
+                                        <span class="text-muted style-text-verified d-block mb-3">Cliente verificada</span>
+                                        <a href="tienda.html" class="btn btn-outline-dark btn-sm rounded-pill w-100 style-btn-buy">
+                                            <i class="bi bi-bag-fill me-1"></i> Comprar producto
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Flechas de navegación -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimoniosCarousel" data-bs-slide="prev" style="width: 5%;">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimoniosCarousel" data-bs-slide="next" style="width: 5%;">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. BANNER INSTAGRAM -->
+        <section class="my-5 p-5 rounded-4 text-center shadow-sm" style="background-color: var(--transparent-yellow);">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <i class="bi bi-instagram fs-1 text-vino mb-3 d-block"></i>
+                    <h2 class="display-6 title-script text-dark mb-3">¡Únete a nuestra comunidad!</h2>
+                    <p class="text-muted mb-4">
+                        Síguenos en Instagram para enterarte antes que nadie de los nuevos lanzamientos, tutoriales de belleza, promociones exclusivas e inspiración diaria.
+                    </p>
+                    <a href="https://instagram.com/fp.essentials" target="_blank" rel="noopener noreferrer" class="btn btn-hero text-decoration-none px-4 py-2">
+                        <i class="bi bi-instagram me-2"></i>Ir a nuestro Instagram @fp.essentials
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 5. PIE DE PÁGINA (FOOTER) -->
+    <footer class="bg-footer py-4 mt-5">
+        <div class="container">
+            <div class="row g-4 footer-links">
+                <!-- Columna 1: Company -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Company</h3>
+                    <a href="index.html">Home</a>
+                    <a href="nosotros.html">About</a>
+                    <a href="#">Solutions</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Team</a>
+                    <a href="#">Career</a>
+                </div>
+
+                <!-- Columna 2: Documentation -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Documentation</h3>
+                    <a href="ayuda.html">Help Centre</a>
+                    <a href="ayuda.html">Contact</a>
+                    <a href="ayuda.html">FAQ</a>
+                    <a href="ayuda.html">Privacy Policy</a>
+                </div>
+
+                <!-- Columna 3: Social -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Social</h3>
+                    <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook me-2"></i>Facebook</a>
+                    <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram me-2"></i>Instagram</a>
+                    <a href="https://tiktok.com" target="_blank"><i class="bi bi-tiktok me-2"></i>TikTok</a>
+                </div>
+
+                <!-- Columna 4: Síguenos / Preguntas -->
+                <div class="col-6 col-md-3">
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark fw-normal border px-2 py-1">SÍGUENOS EN <i class="bi bi-heart text-vino ms-1"></i></span>
+                    </div>
+                    <h3 class="footer-title mb-1">PREGUNTAS</h3>
+                    <p class="small text-dark mb-2">Lun - vie en un plazo 24 a 48 horas</p>
+                    <p class="small text-dark mb-0"><i class="bi bi-envelope me-1"></i> correo@gmail.com</p>
+                </div>
+            </div>
+
+            <hr class="my-4 text-secondary border-opacity-25">
+
+            <div class="text-center text-dark small">
+                © 2024 Glow Self Care Box. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script de control para búsqueda global del encabezado -->
+    <script>
+        function handleHeaderSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('headerSearchInput').value.toLowerCase().trim();
+            if (!query) return;
+
+            if (query.includes('ayuda') || query.includes('faq')) {
+                window.location.href = 'ayuda.html';
+            } else if (query.includes('inicio') || query.includes('home')) {
+                window.location.href = 'index.html';
+            } else if (query.includes('nosotros') || query.includes('quienes')) {
+                window.location.href = 'nosotros.html';
+            } else {
+                window.location.href = `tienda.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+    </script>
+
+    <!-- ========================================== -->
+    <!-- SCRIPT HOMOLOGADO: CARRITO Y FAVORITOS (SESSIONSTORAGE) -->
+    <!-- ========================================== -->
+    <script>
+        const FPStore = {
+            getCart: () => JSON.parse(sessionStorage.getItem('fp_cart')) || [],
+            saveCart: (cart) => sessionStorage.setItem('fp_cart', JSON.stringify(cart)),
+            getFavorites: () => JSON.parse(sessionStorage.getItem('fp_favorites')) || [],
+            saveFavorites: (favs) => sessionStorage.setItem('fp_favorites', JSON.stringify(favs)),
+
+            addToCart: (product) => {
+                let cart = FPStore.getCart();
+                let existing = cart.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            incrementQuantity: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                let item = cart.find(i => i.id === id);
+                if (item) {
+                    item.quantity += 1;
+                    FPStore.saveCart(cart);
+                    FPStore.updateUI();
+                }
+            },
+
+            removeFromCart: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                cart = cart.filter(item => item.id !== id);
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            toggleFavorite: (product, event) => {
+                if (event) event.stopPropagation();
+                let favs = FPStore.getFavorites();
+                let index = favs.findIndex(item => item.id === product.id);
+                if (index > -1) {
+                    favs.splice(index, 1);
+                } else {
+                    favs.push(product);
+                }
+                FPStore.saveFavorites(favs);
+                FPStore.updateUI();
+            },
+
+            updateUI: () => {
+                const cart = FPStore.getCart();
+                const favs = FPStore.getFavorites();
+
+                document.querySelectorAll('.cart-count').forEach(el => el.textContent = cart.reduce((sum, i) => sum + i.quantity, 0));
+                document.querySelectorAll('.fav-count').forEach(el => el.textContent = favs.length);
+
+                const cartContainer = document.getElementById('cart-items-container');
+                const cartSummary = document.getElementById('cart-summary-container');
+
+                if (cartContainer) {
+                    if (cart.length === 0) {
+                        cartContainer.innerHTML = `<p class="text-muted text-center py-3 small m-0">Tu carrito está vacío. Explora la <a href="tienda.html" class="text-dark fw-bold">Tienda</a>.</p>`;
+                        if (cartSummary) cartSummary.classList.add('d-none');
+                    } else {
+                        let totalSum = 0;
+                        cartContainer.innerHTML = cart.map(item => {
+                            const itemSubtotal = item.price * item.quantity;
+                            totalSum += itemSubtotal;
+                            const category = item.category || 'General';
+
+                            return `
+                                <div class="py-2 border-bottom" onclick="event.stopPropagation();">
+                                    <div class="d-flex align-items-start justify-content-between gap-2">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <div class="fw-bold text-dark d-flex align-items-center">
+                                                <span class="text-truncate" title="${item.name}">${item.name}</span>
+                                                ${item.quantity > 1 ? `<span class="badge bg-secondary rounded-pill ms-1 flex-shrink-0" style="font-size: 0.65rem;">x${item.quantity}</span>` : ''}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">Categoría: ${category}</div>
+                                        </div>
+                                        <div class="text-end flex-shrink-0" style="width: 110px; min-width: 110px; white-space: nowrap;">
+                                            <span class="fw-bold text-dark d-block small">$${itemSubtotal.toFixed(2)} MXN</span>
+                                        </div>
+                                        <div class="btn-group btn-group-sm flex-shrink-0">
+                                            <button class="btn btn-outline-dark px-2" onclick="FPStore.incrementQuantity('${item.id}', event)" title="Añadir 1 producto más"><i class="bi bi-plus-lg"></i></button>
+                                            <button class="btn btn-outline-danger px-2" onclick="FPStore.removeFromCart('${item.id}', event)" title="Eliminar producto"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        if (cartSummary) {
+                            cartSummary.classList.remove('d-none');
+                            const iva = totalSum * 0.16;
+                            document.getElementById('cart-iva-amount').textContent = `$${iva.toFixed(2)} MXN`;
+                            document.getElementById('cart-total-amount').textContent = `$${totalSum.toFixed(2)} MXN`;
+                        }
+                    }
+                }
+
+                const favContainer = document.getElementById('fav-items-container');
+                if (favContainer) {
+                    if (favs.length === 0) {
+                        favContainer.innerHTML = `<p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>`;
+                    } else {
+                        favContainer.innerHTML = favs.map(item => `
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom" onclick="event.stopPropagation();">
+                                <span class="text-truncate me-2 small text-muted" style="max-width: 150px;" title="${item.name}">${item.name}</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-dark p-1 me-1" title="Añadir al carrito" onclick="FPStore.addToCart({id: '${item.id}', name: '${item.name}', price: ${item.price}, category: '${item.category || 'General'}'}); event.stopPropagation();"><i class="bi bi-bag-plus"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger p-1" title="Eliminar de favoritos" onclick="FPStore.toggleFavorite({id: '${item.id}'}, event)"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            },
+
+            checkoutWhatsApp: (phone = "5215500000000") => {
+                const cart = FPStore.getCart();
+                if (cart.length === 0) {
+                    alert("Tu carrito está vacío.");
+                    return;
+                }
+                let total = 0;
+                let message = "Hola, me gustaría realizar el pedido de los siguientes artículos de FP Essentials:%0A";
+                cart.forEach((item, index) => {
+                    const subtotal = item.price * item.quantity;
+                    total += subtotal;
+                    message += `%0A${index + 1}. *${item.name}* (Cantidad: ${item.quantity}) - Cat: ${item.category || 'General'} - $${subtotal.toFixed(2)} MXN`;
+                });
+                const iva = total * 0.16;
+                message += `%0A%0A*I.V.A. (16% incl.):* $${iva.toFixed(2)} MXN`;
+                message += `%0A*Total de la compra:* $${total.toFixed(2)} MXN`;
+                window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            FPStore.updateUI();
+        });
+    </script>
+</body>
+</html>

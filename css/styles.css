@@ -1,0 +1,195 @@
+/* ==========================================
+   FP ESSENTIALS - ESTILOS PRINCIPALES
+   ========================================== */
+
+/* 1. PALETA DE COLORES Y VARIABLES GLOBALES */
+:root {
+    --sceptre-red: #4D0E12;         /* Tinto / Vino */
+    --cerulean-blue: #A5BCD6;       /* Azul pastel */
+    --transparent-yellow: #F5EFC6;  /* Amarillo pastel / Crema */
+    --body-bg: #FFFFFF;             /* Fondo general */
+}
+
+/* 2. FUENTES Y REGLAS BÁSICAS */
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--body-bg);
+    color: #333333;
+}
+
+.brand-font {
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.title-script {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+}
+
+.text-vino {
+    color: var(--sceptre-red) !important;
+}
+
+/* 3. ENCABEZADO Y PIE DE PÁGINA */
+.bg-header {
+    background-color: var(--transparent-yellow);
+}
+
+.bg-footer {
+    background-color: var(--cerulean-blue);
+}
+
+.footer-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+.footer-links a {
+    display: block;
+    color: #333333;
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: 0.4rem;
+}
+
+.footer-links a:hover {
+    color: var(--sceptre-red);
+    text-decoration: underline;
+}
+
+.search-input {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-right: none;
+}
+
+.search-btn {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+.style-badge-cart {
+    font-size: 0.65rem;
+}
+
+/* 4. SECCIÓN HERO NOVEDADES (INICIO) */
+.hero-novedades {
+    /* REEMPLAZA 'banner-fondo.jpg' POR EL NOMBRE EXACTO DE TU IMAGEN EN LA CARPETA img/ */
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('../img/banner-fondo.jpg') no-repeat center center;
+    background-size: cover;
+    border-radius: 16px;
+    padding: 3.5rem 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.btn-hero {
+    background-color: var(--sceptre-red);
+    color: #ffffff !important;
+    border-radius: 50px;
+    padding: 0.6rem 1.8rem;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-hero:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: var(--sceptre-red);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+}
+
+/* 5. TARJETAS DE PRODUCTO Y OFERTAS */
+.card-product {
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 1rem;
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.product-img {
+    max-height: 150px;
+    object-fit: contain;
+}
+
+.product-desc {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.btn-primary-fp {
+    background-color: var(--sceptre-red);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-primary-fp:hover {
+    background-color: #3b0a0e;
+    color: #ffffff;
+}
+
+.btn-heart {
+    background: transparent;
+    border: none;
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.btn-heart:hover {
+    color: var(--sceptre-red);
+}
+
+.badge-discount {
+    background-color: var(--sceptre-red);
+    color: #ffffff;
+    font-size: 0.75rem;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+}
+
+/* Estilos para el acordeón FAQ */
+.faq-card {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Estado cuando la pregunta está desplegada (abierta) */
+.faq-card:has(.collapse.show) {
+  border-color: #000 !important; /* Contorno marcado al abrir */
+  background-color: #f0f0f0 !important; /* Fondo ligeramente tenue */
+}
+
+/* Cambios de símbolo ◎ -> ◉ usando CSS pseudo-elementos */
+.faq-toggle-icon::after {
+  content: "◎";
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Cuando el botón NO tiene la clase 'collapsed' (es decir, está desplegado) */
+.faq-button:not(.collapsed) .faq-toggle-icon::after {
+  content: "◉";
+  color: #000;
+}

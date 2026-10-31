@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FP Essentials | Inicio</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilo del banner de ancho completo integrado con carrusel */
+        .hero-banner-carrusel {
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+                        url('img/banner-inicio.jpg') center/cover no-repeat;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            margin-top: -1.5rem;
+            margin-bottom: 3rem;
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-banner-content {
+            z-index: 2;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .btn-banner-link {
+            background-color: var(--color-vino, #6b1d2f);
+            color: #ffffff !important;
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-banner-link:hover {
+            background-color: #521422;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .carousel-indicators [data-bs-target] {
+            background-color: #ffffff;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 5px;
+        }
+
+        .banner-compact-img {
+            max-width: 220px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .banner-compact-img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Estilo para tarjetas clickeables y difuminado de stock */
+        .interactive-card {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1) !important;
+        }
+        .stock-badge-soft {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #495057;
+            font-size: 0.7rem;
+            border: 1px dashed rgba(108, 117, 125, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ENCABEZADO Y NAVEGACIÓN -->
+    <header class="bg-header py-3">
+        <div class="container">
+            <div class="row align-items-center mb-2">
+                <!-- Logotipo de la marca -->
+                <div class="col-6 col-md-3">
+                    <a href="index.html" class="text-decoration-none d-inline-block">
+                        <img src="Img/logo.png" alt="FP Essentials Logo" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/120x40?text=LOGO'">
+                    </a>
+                </div>
+
+                <!-- Buscador de productos funcional -->
+                <div class="col-12 col-md-6 order-3 order-md-2 mt-2 mt-md-0">
+                    <form class="d-flex" role="search" onsubmit="handleGlobalSearch(event)">
+                        <div class="input-group">
+                            <input id="globalSearchInput" class="form-control search-input px-3" type="search" placeholder="Buscar cosméticos, joyería, ofertas, medidas..." aria-label="Buscar">
+                            <button class="btn search-btn text-muted px-3" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Iconos de interacción con sessionStorage (Favoritos y Carrito Desplegable) -->
+                <div class="col-6 col-md-3 order-2 order-md-3 text-end">
+                    <!-- Favoritos Dropdown -->
+                    <div class="dropdown d-inline-block me-2">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownFavoritos" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Favoritos">
+                            <i class="bi bi-heart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 fav-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownFavoritos" style="width: 300px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mis Favoritos</span>
+                                <i class="bi bi-heart-fill text-vino"></i>
+                            </li>
+                            <div id="fav-items-container">
+                                <p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <!-- Carrito de Compras Dropdown -->
+                    <div class="dropdown d-inline-block">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownCarrito" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Carrito">
+                            <i class="bi bi-bag"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 cart-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownCarrito" style="width: 380px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mi Carrito de Compras</span>
+                                <i class="bi bi-bag-check text-vino"></i>
+                            </li>
+                            <div id="cart-items-container">
+                                <p class="text-muted text-center py-2 small m-0">Tu carrito está vacío.</p>
+                            </div>
+                            
+                            <!-- Totales e I.V.A. -->
+                            <div id="cart-summary-container" class="border-top pt-2 mt-2 d-none">
+                                <div class="d-flex justify-content-between text-muted small mb-1">
+                                    <span>I.V.A. (16% incluido):</span>
+                                    <span id="cart-iva-amount">$0.00 MXN</span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold text-dark fs-6 mb-3">
+                                    <span>Total:</span>
+                                    <span id="cart-total-amount" class="text-vino">$0.00 MXN</span>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm w-100 rounded-pill fw-semibold shadow-sm" onclick="FPStore.checkoutWhatsApp()">
+                                    <i class="bi bi-whatsapp me-1"></i> Enviar pedido por WhatsApp
+                                </button>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menú de navegación principal -->
+            <nav class="navbar navbar-expand-md navbar-light p-0 pt-2 border-top border-secondary border-opacity-10">
+                <div class="container p-0">
+                    <button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Navegación">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                        <ul class="navbar-nav gap-md-5 text-center">
+                            <li class="nav-item">
+                                <a class="nav-link active fw-bold text-dark border-bottom border-2 border-dark px-2" href="index.html">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="tienda.html">Tienda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="nosotros.html">Nosotros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark px-2" href="ayuda.html">Ayuda</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-4">
+
+        <!-- 2. SECCIÓN BANNER PRINCIPAL CON FONDO DE IMAGEN Y CARRUSEL DINÁMICO -->
+<section class="hero-banner-carrusel text-center py-5" style="background-image: url('Img/banner-inicio.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div id="novedadesCarousel" class="carousel slide w-100 py-2" data-bs-ride="carousel">
+        
+        <!-- Indicadores de puntos -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#novedadesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Novedades"></button>
+            <button type="button" data-bs-target="#novedadesCarousel" data-bs-slide-to="1" aria-label="Kits Exclusivos"></button>
+            <button type="button" data-bs-target="#novedadesCarousel" data-bs-slide-to="2" aria-label="Especial para Niñas"></button>
+        </div>
+
+        <!-- Elementos deslizables -->
+        <div class="carousel-inner pb-4">
+            
+            <!-- Diapositiva 1: Novedades -->
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 hero-banner-content text-md-start text-center px-3">
+                            <h1 class="display-4 title-script text-white mb-3">Novedades</h1>
+                            <p class="subtitle-font text-white mb-4 fs-5">
+                                Descubre las ofertas y promociones que tenemos para ti, así como los productos recién llegados a nuestra tienda.
+                            </p>
+                            <span class="btn-banner-link" data-bs-toggle="modal" data-bs-target="#modalNovedades" style="cursor: pointer;">
+                                Ver colección Novedades <i class="bi bi-arrow-right ms-2"></i>
+                            </span>
+                        </div>
+                        <div class="col-md-4 text-center mt-3 mt-md-0">
+                            <img src="Img/novedades.jpeg" alt="Novedades" class="banner-compact-img" data-bs-toggle="modal" data-bs-target="#modalNovedades" onerror="this.src='https://via.placeholder.com/220x150?text=Novedades'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 2: Kits Exclusivos -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 hero-banner-content text-md-start text-center px-3">
+                            <h1 class="display-4 title-script text-white mb-3">Kits Exclusivos</h1>
+                            <p class="subtitle-font text-white mb-4 fs-5">
+                                Aprovecha nuestros kits exclusivos por tiempo limitado. ¡Descubre tu set ideal antes de que cambie la selección!
+                            </p>
+                            <span class="btn-banner-link" data-bs-toggle="modal" data-bs-target="#modalKits" style="cursor: pointer;">
+                                Explorar Kits <i class="bi bi-arrow-right ms-2"></i>
+                            </span>
+                        </div>
+                        <div class="col-md-4 text-center mt-3 mt-md-0">
+                            <img src="Img/kits-exclusivos.jpeg" alt="Kits Exclusivos" class="banner-compact-img" data-bs-toggle="modal" data-bs-target="#modalKits" onerror="this.src='https://via.placeholder.com/220x150?text=Kits+Exclusivos'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 3: Especial para Niñas -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 hero-banner-content text-md-start text-center px-3">
+                            <h1 class="display-4 title-script text-white mb-3">Especial para Niñas</h1>
+                            <p class="subtitle-font text-white mb-4 fs-5">
+                                Selección especial de accesorios y detalles de belleza ideales para niñas y jóvenes.
+                            </p>
+                            <span class="btn-banner-link" data-bs-toggle="modal" data-bs-target="#modalJoyeria" style="cursor: pointer;">
+                                Ver Especial Niñas <i class="bi bi-arrow-right ms-2"></i>
+                            </span>
+                        </div>
+                        <div class="col-md-4 text-center mt-3 mt-md-0">
+                            <img src="Img/niñas.jpeg" alt="Especial para Niñas" class="banner-compact-img" data-bs-toggle="modal" data-bs-target="#modalJoyeria" onerror="this.src='https://via.placeholder.com/220x150?text=Especial+Ninas'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+                <!-- Flechas de navegación lateral -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- 3. SECCIÓN MÁS VENDIDOS -->
+        <section id="mas-vendidos" class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 fw-bold m-0 text-dark">Más vendidos</h2>
+                <a href="#" class="text-decoration-none text-vino small fw-semibold" data-bs-toggle="modal" data-bs-target="#modalVerTodoMasVendidos">Ver todo &gt;</a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                <!-- Producto 1: Skincare -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('mv-1', 'Ácido Hialurónico', 390.00, 'Skincare', 'Sérum hidratante intensivo con ácido hialurónico puro que restaura la flexibilidad y profundidad de hidratación en la piel.', 'img/producto-3.png', 150)">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-heart fav-btn-mv-1" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'mv-1', name: 'Ácido Hialurónico', price: 390.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/ácido-hialurónico.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Ácido Hialurónico" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Acido+Hialuronico'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Ácido Hialurónico</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Sérum hidratante intensivo con ácido hialurónico puro que restaura la flexibilidad y profundidad de hidratación en la piel.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (150 disponibles)</span>
+                            <p class="fw-bold text-vino mb-2">$390.00 MXN <span class="small text-muted fw-normal" style="font-size: 0.7rem;">(Incl. I.V.A.)</span></p>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'mv-1', name: 'Ácido Hialurónico', price: 390.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 2: Skincare -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('mv-2', 'Protector Solar', 450.00, 'Skincare', 'Protector solar facial de amplio espectro SPF 50+ con acabado invisible, toque seco y sin efecto blanquecino. Ideal para uso diario.', 'img/producto-2.png', 160)">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-heart fav-btn-mv-2" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'mv-2', name: 'Protector Solar', price: 450.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/protector-solar.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Protector Solar" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Protector+Solar'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Protector Solar</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Protector solar facial de amplio espectro SPF 50+ con acabado invisible, toque seco y sin efecto blanquecino. Ideal para uso diario.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (160 disponibles)</span>
+                            <p class="fw-bold text-vino mb-2">$450.00 MXN <span class="small text-muted fw-normal" style="font-size: 0.7rem;">(Incl. I.V.A.)</span></p>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'mv-2', name: 'Protector Solar', price: 450.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 3: Maquillaje -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('mv-3', 'Corrector Líquido', 280.00, 'Maquillaje', 'Corrector de alta cobertura y textura ligera que ilumina la zona de la ojera y difumina imperfecciones sin marcar líneas.', 'img/producto-2.png', 110)">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-heart fav-btn-mv-3" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'mv-3', name: 'Corrector Líquido', price: 280.00, category: 'Maquillaje'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/corrector-liquido.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Corrector Líquido" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Corrector+Liquido'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Corrector Líquido</h3>
+                        <p class="small text-muted mb-1">Maquillaje</p>
+                        <p class="product-desc small text-muted">Corrector de alta cobertura y textura ligera que ilumina la zona de la ojera y difumina imperfecciones sin marcar líneas.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (110 disponibles)</span>
+                            <p class="fw-bold text-vino mb-2">$280.00 MXN <span class="small text-muted fw-normal" style="font-size: 0.7rem;">(Incl. I.V.A.)</span></p>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'mv-3', name: 'Corrector Líquido', price: 280.00, category: 'Maquillaje'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 4: Maquillaje -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('mv-4', 'Iluminador Polvo', 320.00, 'Maquillaje', 'Polvo iluminador ultrafino con partículas reflectoras de luz que otorgan un brillo radiante y sofisticado.', 'img/producto-4.png', 80)">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-heart fav-btn-mv-4" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'mv-4', name: 'Iluminador Polvo', price: 320.00, category: 'Maquillaje'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/iluminador-polvo.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Iluminador Polvo" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Iluminador+Polvo'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Iluminador Polvo</h3>
+                        <p class="small text-muted mb-1">Maquillaje</p>
+                        <p class="product-desc small text-muted">Polvo iluminador ultrafino con partículas reflectoras de luz que otorgan un brillo radiante y sofisticado.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (80 disponibles)</span>
+                            <p class="fw-bold text-vino mb-2">$320.00 MXN <span class="small text-muted fw-normal" style="font-size: 0.7rem;">(Incl. I.V.A.)</span></p>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'mv-4', name: 'Iluminador Polvo', price: 320.00, category: 'Maquillaje'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SECCIÓN OFERTAS -->
+        <section id="ofertas" class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 fw-bold m-0 text-dark">Ofertas especiales</h2>
+                <a href="#" class="text-decoration-none text-vino small fw-semibold" data-bs-toggle="modal" data-bs-target="#modalVerTodoOfertas">Ver todo &gt;</a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                <!-- Oferta 1 (Skincare) -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('of-1', 'Crema Hidratante', 324.00, 'Skincare', 'Crema facial de textura ligera y rápida absorción que hidrata profundamente y fortalece la barrera cutánea sin sensación grasosa. (Precio original: $360.00)', 'img/oferta-1.png', 140)">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge badge-discount bg-danger">-10%</span>
+                            <button class="btn-heart fav-btn-of-1" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'of-1', name: 'Crema Hidratante', price: 324.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/crema-hidratante.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Crema Hidratante" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Crema+Hidratante'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Crema Hidratante</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Crema facial de textura ligera y rápida absorción que hidrata profundamente y fortalece la barrera cutánea sin sensación grasosa.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (140 disponibles)</span>
+                            <p class="fw-bold text-vino mb-0"><span class="text-muted text-decoration-line-through small me-1">$360.00</span> $324.00 MXN</p>
+                            <span class="small text-muted d-block mb-2" style="font-size: 0.7rem;">(Incl. I.V.A.)</span>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'of-1', name: 'Crema Hidratante', price: 324.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oferta 2 (Skincare) -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('of-2', 'Contorno Ojos', 306.00, 'Skincare', 'Gel-crema para el contorno de ojos enriquecido con péptidos y cafeína para descongestionar, iluminar y revitalizar la mirada. (Precio original: $340.00)', 'img/oferta-2.png', 80)">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge badge-discount bg-danger">-10%</span>
+                            <button class="btn-heart fav-btn-of-2" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'of-2', name: 'Contorno Ojos', price: 306.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/contorno-ojos.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Contorno Ojos" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Contorno+Ojos'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Contorno Ojos</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Gel-crema para el contorno de ojos enriquecido con péptidos y cafeína para descongestionar, iluminar y revitalizar la mirada.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (80 disponibles)</span>
+                            <p class="fw-bold text-vino mb-0"><span class="text-muted text-decoration-line-through small me-1">$340.00</span> $306.00 MXN</p>
+                            <span class="small text-muted d-block mb-2" style="font-size: 0.7rem;">(Incl. I.V.A.)</span>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'of-2', name: 'Contorno Ojos', price: 306.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oferta 3 (Skincare) -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('of-3', 'Exfoliante Facial', 252.00, 'Skincare', 'Exfoliante facial suave con micropartículas naturales que renuevan la piel, eliminando impurezas para un cutis ultrasuave. (Precio original: $280.00)', 'img/oferta-3.png', 70)">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge badge-discount bg-danger">-10%</span>
+                            <button class="btn-heart fav-btn-of-3" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'of-3', name: 'Exfoliante Facial', price: 252.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/exfoliante-facial.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Exfoliante Facial" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Exfoliante+Facial'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Exfoliante Facial</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Exfoliante facial suave con micropartículas naturales que renuevan la piel, eliminando impurezas para un cutis ultrasuave.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (70 disponibles)</span>
+                            <p class="fw-bold text-vino mb-0"><span class="text-muted text-decoration-line-through small me-1">$280.00</span> $252.00 MXN</p>
+                            <span class="small text-muted d-block mb-2" style="font-size: 0.7rem;">(Incl. I.V.A.)</span>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'of-3', name: 'Exfoliante Facial', price: 252.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oferta 4 (Skincare) -->
+                <div class="col">
+                    <div class="card card-product h-100 text-center p-3 interactive-card" onclick="openProductModal('of-4', 'Mascarilla Arcilla', 279.00, 'Skincare', 'Mascarilla purificante a base de arcilla rosa y minerales que desintoxica los poros, absorbe el exceso de sebo y suaviza la piel al instante. (Precio original: $310.00)', 'img/oferta-4.png', 90)">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge badge-discount bg-danger">-10%</span>
+                            <button class="btn-heart fav-btn-of-4" aria-label="Favorito" onclick="FPStore.toggleFavorite({id: 'of-4', name: 'Mascarilla Arcilla', price: 279.00, category: 'Skincare'}, event)"><i class="bi bi-heart"></i></button>
+                        </div>
+                        <img src="img/mascarilla-arcilla.jpeg" class="img-fluid product-img mx-auto mb-2" alt="Mascarilla Arcilla" style="height: 140px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150x150?text=Mascarilla+Arcilla'">
+                        <h3 class="h6 fw-bold text-uppercase mb-1">Mascarilla Arcilla</h3>
+                        <p class="small text-muted mb-1">Skincare</p>
+                        <p class="product-desc small text-muted">Mascarilla purificante a base de arcilla rosa y minerales que desintoxica los poros, absorbe el exceso de sebo y suaviza la piel al instante.</p>
+                        <div class="mt-auto">
+                            <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (90 disponibles)</span>
+                            <p class="fw-bold text-vino mb-0"><span class="text-muted text-decoration-line-through small me-1">$310.00</span> $279.00 MXN</p>
+                            <span class="small text-muted d-block mb-2" style="font-size: 0.7rem;">(Incl. I.V.A.)</span>
+                            <button class="btn btn-primary-fp w-100 rounded-pill" onclick="FPStore.addToCart({id: 'of-4', name: 'Mascarilla Arcilla', price: 279.00, category: 'Skincare'}); event.stopPropagation();">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 5. PIE DE PÁGINA (FOOTER) -->
+    <footer class="bg-footer py-4 mt-5">
+        <div class="container">
+            <div class="row g-4 footer-links">
+                <!-- Columna 1: Company -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Company</h3>
+                    <a href="index.html">Home</a>
+                    <a href="nosotros.html">About</a>
+                    <a href="#">Solutions</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Team</a>
+                    <a href="#">Career</a>
+                </div>
+
+                <!-- Columna 2: Documentation -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Documentation</h3>
+                    <a href="ayuda.html">Help Centre</a>
+                    <a href="ayuda.html">Contact</a>
+                    <a href="ayuda.html">FAQ</a>
+                    <a href="ayuda.html">Privacy Policy</a>
+                </div>
+
+                <!-- Columna 3: Social -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Social</h3>
+                    <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook me-2"></i>Facebook</a>
+                    <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram me-2"></i>Instagram</a>
+                    <a href="https://tiktok.com" target="_blank"><i class="bi bi-tiktok me-2"></i>TikTok</a>
+                </div>
+
+                <!-- Columna 4: Síguenos / Preguntas -->
+                <div class="col-6 col-md-3">
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark fw-normal border px-2 py-1">SÍGUENOS EN <i class="bi bi-heart text-vino ms-1"></i></span>
+                    </div>
+                    <h3 class="footer-title mb-1">PREGUNTAS</h3>
+                    <p class="small text-dark mb-2">Lun - vie en un plazo 24 a 48 horas</p>
+                    <p class="small text-dark mb-0"><i class="bi bi-envelope me-1"></i> correo@gmail.com</p>
+                </div>
+            </div>
+
+            <hr class="my-4 text-secondary border-opacity-25">
+
+            <div class="text-center text-dark small">
+                © 2024 Glow Self Care Box. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODAL DINÁMICO DE DETALLE DE PRODUCTO -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content rounded-4 border-0 shadow-lg p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span id="modalProdCategory" class="badge bg-secondary mb-1">Categoría</span>
+                        <h4 id="modalProdTitle" class="fw-bold text-dark m-0">Nombre de Producto</h4>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="text-center mb-3">
+                    <img id="modalProdImg" src="" alt="Producto" class="img-fluid rounded-3" style="max-height: 200px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/250x200?text=Producto'">
+                </div>
+                <p id="modalProdDesc" class="text-muted small mb-3">Descripción detallada del artículo...</p>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3 border-top border-bottom py-2">
+                    <span id="modalProdStock" class="badge rounded-pill stock-badge-soft">Stock: 0</span>
+                    <span class="text-muted small">I.V.A. (16%) incluido</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span id="modalProdPrice" class="fs-5 fw-bold text-vino">$0.00 MXN</span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button id="modalAddCartBtn" class="btn btn-primary-fp flex-grow-1 rounded-pill">Añadir al Carrito</button>
+                    <button id="modalFavBtn" class="btn btn-outline-dark rounded-pill px-3" title="Favorito"><i class="bi bi-heart"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: CATEGORÍA NOVEDADES -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalNovedades" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Colección: Novedades Recientes</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/base-liquida.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Base Líquida">
+                                <h6 class="fw-bold text-uppercase mb-1">Base Líquida</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 120</span>
+                                <p class="fw-bold text-vino small mb-2">$450.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'nov-1', name: 'Base Líquida', price: 450.00, category: 'Maquillaje'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/gargantilla-perla.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Gargantilla Perla">
+                                <h6 class="fw-bold text-uppercase mb-1">Gargantilla Perla</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 20</span>
+                                <p class="fw-bold text-vino small mb-2">$850.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'nov-2', name: 'Gargantilla Perla', price: 850.00, category: 'Joyería'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/crema-hidratante.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Crema Hidratante">
+                                <h6 class="fw-bold text-uppercase mb-1">Crema Hidratante</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 140</span>
+                                <p class="fw-bold text-vino small mb-2">$288.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'nov-3', name: 'Crema Hidratante', price: 288.00, category: 'Skincare'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: CATEGORÍA KITS EXCLUSIVOS -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalKits" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Colección: Kits Exclusivos FP</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        <!-- Kit 1: Maquillaje (Labial Matte + Máscara Volumen = $390 + $340 = $730 - 6.8% = $680) -->
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/kit-aura.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Aura de Terciopelo">
+                                <h6 class="fw-bold text-uppercase mb-1">Aura de Terciopelo</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (2 disp.)</span>
+                                <p class="small text-muted px-1 mb-2" style="font-size: 0.75rem;">Labial Matte + Máscara Volumen. El dúo infalible para una mirada magnética y unos labios perfectos; potencia tu belleza natural al instante por menos que comprarlos separados.</p>
+                                <p class="fw-bold text-vino small mb-2">$680.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'kit-1', name: 'Aura de Terciopelo', price: 680.00, category: 'Maquillaje'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <!-- Kit 2: Joyería (Anillo Geométrico + Arracadas Huggies = $690 + $490 = $1180 - 6.7% = $1,100) -->
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/kit-destello.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Destello Minimalista">
+                                <h6 class="fw-bold text-uppercase mb-1">Destello Minimalista</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (2 disp.)</span>
+                                <p class="small text-muted px-1 mb-2" style="font-size: 0.75rem;">Anillo Geométrico + Arracadas Huggies. Eleva tu elegancia cotidiana combinando plata y destellos de luz coordinados; el set ideal para lucir sofisticada sin esfuerzo.</p>
+                                <p class="fw-bold text-vino small mb-2">$1,100.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'kit-2', name: 'Destello Minimalista', price: 1100.00, category: 'Joyería'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <!-- Kit 3: Skincare (Sérum Vitamina + Crema Hidratante = $420 + $360 = $780 - 5.1% = $740) -->
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/kit-ritual.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Ritual Glow Radiante">
+                                <h6 class="fw-bold text-uppercase mb-1">Ritual Glow Radiante</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock limitado (2 disp.)</span>
+                                <p class="small text-muted px-1 mb-2" style="font-size: 0.75rem;">Sérum Vitamina + Crema Hidratante. El ritual definitivo para despertar la luminosidad y nutrición profunda de tu piel; juntas trabajan mejor que un solo producto.</p>
+                                <p class="fw-bold text-vino small mb-2">$740.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'kit-3', name: 'Ritual Glow Radiante', price: 740.00, category: 'Skincare'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: CATEGORÍA ESPECIAL NIÑAS (10-15 AÑOS) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalJoyeria" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Colección: Especial para Niñas</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/broqueles-mariposa.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Broqueles Mariposa">
+                                <h6 class="fw-bold text-uppercase mb-1">Broqueles Mariposa</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 15</span>
+                                <p class="fw-bold text-vino small mb-2">$1,250.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'j1', name: 'Broqueles Mariposa', price: 1250.00, category: 'Joyería'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/rubor-compacto.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Rubor Compacto">
+                                <h6 class="fw-bold text-uppercase mb-1">Rubor Compacto</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 140</span>
+                                <p class="fw-bold text-vino small mb-2">$290.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'm4', name: 'Rubor Compacto', price: 290.00, category: 'Maquillaje'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/gel-limpiador.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Gel Limpiador">
+                                <h6 class="fw-bold text-uppercase mb-1">Gel Limpiador</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-2 px-2 py-1">Stock: 120</span>
+                                <p class="fw-bold text-vino small mb-2">$290.00 MXN <span class="text-muted fw-normal" style="font-size: 0.65rem;">(Incl. I.V.A.)</span></p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 's1', name: 'Gel Limpiador', price: 290.00, category: 'Skincare'})">Añadir al Carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 4: VER TODO MÁS VENDIDOS ARTÍCULOS: 4 ARRIBA, 2 CENTRADOS ABAJO) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalVerTodoMasVendidos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Catálogo Completo: Más Vendidos</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4 text-center">Mas vendidos &raquo;</p>
+                    <!-- Fila Superior: 4 artículos -->
+                    <div class="row row-cols-1 row-cols-md-4 g-3 mb-3">
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/anillo-geometrico.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Anillo Geométrico">
+                                <h6 class="fw-bold text-uppercase mb-1">Anillo Geométrico</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 35</span>
+                                <p class="fw-bold text-vino small mb-2">$690.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-1', name: 'Anillo Geométrico', price: 690.00, category: 'Joyería'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/arracadas-huggies.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Arracadas Huggies">
+                                <h6 class="fw-bold text-uppercase mb-1">Arracadas Huggies</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 40</span>
+                                <p class="fw-bold text-vino small mb-2">$490.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-2', name: 'Arracadas Huggies', price: 490.00, category: 'Joyería'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/labial-matte.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Labial Matte">
+                                <h6 class="fw-bold text-uppercase mb-1">Labial Matte</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 180</span>
+                                <p class="fw-bold text-vino small mb-2">$390.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-3', name: 'Labial Matte', price: 390.00, category: 'Maquillaje'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/mascara-volumen.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Máscara Volumen">
+                                <h6 class="fw-bold text-uppercase mb-1">Máscara Volumen</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 150</span>
+                                <p class="fw-bold text-vino small mb-2">$340.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-4', name: 'Máscara Volumen', price: 340.00, category: 'Maquillaje'})">Añadir</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fila Inferior: 2 artículos centrados -->
+                    <div class="row justify-content-center g-3">
+                        <div class="col-md-3">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/ácido-hialurónico.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Ácido Hialurónico">
+                                <h6 class="fw-bold text-uppercase mb-1">Ácido Hialurónico</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 150</span>
+                                <p class="fw-bold text-vino small mb-2">$390.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-5', name: 'Ácido Hialurónico', price: 390.00, category: 'Skincare'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/protector-solar.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Protector Solar">
+                                <h6 class="fw-bold text-uppercase mb-1">Protector Solar</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge rounded-pill stock-badge-soft mb-1" style="font-size: 0.6rem;">Stock: 160</span>
+                                <p class="fw-bold text-vino small mb-2">$450.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'mv-6', name: 'Protector Solar', price: 450.00, category: 'Skincare'})">Añadir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- ========================================== -->
+    <!-- MODAL 5: VER TODO OFERTAS (ARTÍCULOS: 4 ARRIBA, 2 CENTRADOS ABAJO) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalVerTodoOfertas" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Catálogo Completo: Ofertas Especiales</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4 text-center">OFERTAS &raquo;</p>
+                    <!-- Fila Superior: 4 artículos -->
+                    <div class="row row-cols-1 row-cols-md-4 g-3 mb-3">
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/pulsera-tennis.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Pulsera Tennis">
+                                <h6 class="fw-bold text-uppercase mb-1">Pulsera Tennis</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 30</span>
+                                <p class="fw-bold text-vino small mb-2">$784.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-1', name: 'Pulsera Tennis', price: 784.00, category: 'Joyería'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/anillo-solitario.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Anillo Solitario">
+                                <h6 class="fw-bold text-uppercase mb-1">Anillo Solitario</h6>
+                                <p class="small text-muted mb-1">Joyería</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 20</span>
+                                <p class="fw-bold text-vino small mb-2">$599.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-2', name: 'Anillo Solitario', price: 599.00, category: 'Joyería'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/rubor-compacto.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Rubor Compacto">
+                                <h6 class="fw-bold text-uppercase mb-1">Rubor Compacto</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 140</span>
+                                <p class="fw-bold text-vino small mb-2">$232.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-3', name: 'Rubor Compacto', price: 232.00, category: 'Maquillaje'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/paleta-sombras.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Paleta Sombras">
+                                <h6 class="fw-bold text-uppercase mb-1">Paleta Sombras</h6>
+                                <p class="small text-muted mb-1">Maquillaje</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 60</span>
+                                <p class="fw-bold text-vino small mb-2">$392.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-4', name: 'Paleta Sombras', price: 392.00, category: 'Maquillaje'})">Añadir</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fila Inferior: 2 artículos centrados -->
+                    <div class="row justify-content-center g-3">
+                        <div class="col-md-3">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/sérum-vitamina.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Sérum Vitamina">
+                                <h6 class="fw-bold text-uppercase mb-1">Sérum Vitamina</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 90</span>
+                                <p class="fw-bold text-vino small mb-2">$336.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-5', name: 'Sérum Vitamina', price: 336.00, category: 'Skincare'})">Añadir</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100 text-center p-3 border">
+                                <img src="img/crema-hidratante.jpeg" class="img-fluid mx-auto mb-2" style="height: 100px; object-fit: cover;" alt="Crema Hidratante">
+                                <h6 class="fw-bold text-uppercase mb-1">Crema Hidratante</h6>
+                                <p class="small text-muted mb-1">Skincare</p>
+                                <span class="badge bg-danger text-white mb-1" style="font-size: 0.6rem;">-20% | Stock: 140</span>
+                                <p class="fw-bold text-vino small mb-2">$288.00 MXN</p>
+                                <button class="btn btn-primary-fp btn-sm rounded-pill mt-auto" onclick="FPStore.addToCart({id: 'of-6', name: 'Crema Hidratante', price: 288.00, category: 'Skincare'})">Añadir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPT GENERAL: ESTADO, MODALES, FAVORITOS Y BUSCADOR INTELIGENTE -->
+    <script>
+        const FPStore = {
+            getCart: () => JSON.parse(sessionStorage.getItem('fp_cart')) || [],
+            saveCart: (cart) => sessionStorage.setItem('fp_cart', JSON.stringify(cart)),
+            getFavorites: () => JSON.parse(sessionStorage.getItem('fp_favorites')) || [],
+            saveFavorites: (favs) => sessionStorage.setItem('fp_favorites', JSON.stringify(favs)),
+
+            addToCart: (product) => {
+                let cart = FPStore.getCart();
+                let existing = cart.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            incrementQuantity: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                let item = cart.find(i => i.id === id);
+                if (item) {
+                    item.quantity += 1;
+                    FPStore.saveCart(cart);
+                    FPStore.updateUI();
+                }
+            },
+
+            removeFromCart: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                cart = cart.filter(item => item.id !== id);
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            toggleFavorite: (product, event) => {
+                if (event) event.stopPropagation();
+                let favs = FPStore.getFavorites();
+                let index = favs.findIndex(item => item.id === product.id);
+                if (index > -1) {
+                    favs.splice(index, 1);
+                } else {
+                    favs.push(product);
+                }
+                FPStore.saveFavorites(favs);
+                FPStore.updateUI();
+            },
+
+            isFavorite: (id) => {
+                let favs = FPStore.getFavorites();
+                return favs.some(item => item.id === id);
+            },
+
+            updateUI: () => {
+                const cart = FPStore.getCart();
+                const favs = FPStore.getFavorites();
+
+                document.querySelectorAll('.cart-count').forEach(el => el.textContent = cart.reduce((sum, i) => sum + i.quantity, 0));
+                document.querySelectorAll('.fav-count').forEach(el => el.textContent = favs.length);
+
+                // Actualizar iconos visuales de favoritos en tarjetas
+                document.querySelectorAll('[class*="fav-btn-"]').forEach(btn => {
+                    const classListStr = Array.from(btn.classList).join(' ');
+                    const match = classListStr.match(/fav-btn-([a-z0-9\-]+)/);
+                    if (match && match[1]) {
+                        const prodId = match[1];
+                        const icon = btn.querySelector('i');
+                        if (icon) {
+                            if (FPStore.isFavorite(prodId)) {
+                                icon.className = "bi bi-heart-fill text-vino";
+                            } else {
+                                icon.className = "bi bi-heart";
+                            }
+                        }
+                    }
+                });
+
+                const cartContainer = document.getElementById('cart-items-container');
+                const cartSummary = document.getElementById('cart-summary-container');
+
+                if (cartContainer) {
+                    if (cart.length === 0) {
+                        cartContainer.innerHTML = `<p class="text-muted text-center py-3 small m-0">Tu carrito está vacío. Explora la <a href="tienda.html" class="text-dark fw-bold">Tienda</a>.</p>`;
+                        if (cartSummary) cartSummary.classList.add('d-none');
+                    } else {
+                        let totalSum = 0;
+                        cartContainer.innerHTML = cart.map(item => {
+                            const itemSubtotal = item.price * item.quantity;
+                            totalSum += itemSubtotal;
+                            const category = item.category || 'General';
+
+                            return `
+                                <div class="py-2 border-bottom" onclick="event.stopPropagation();">
+                                    <div class="d-flex align-items-start justify-content-between gap-2">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <div class="fw-bold text-dark d-flex align-items-center">
+                                                <span class="text-truncate" title="${item.name}">${item.name}</span>
+                                                ${item.quantity > 1 ? `<span class="badge bg-secondary rounded-pill ms-1 flex-shrink-0" style="font-size: 0.65rem;">x${item.quantity}</span>` : ''}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">Categoría: ${category}</div>
+                                        </div>
+                                        <div class="text-end flex-shrink-0" style="width: 110px; min-width: 110px; white-space: nowrap;">
+                                            <span class="fw-bold text-dark d-block small">$${itemSubtotal.toFixed(2)} MXN</span>
+                                        </div>
+                                        <div class="btn-group btn-group-sm flex-shrink-0">
+                                            <button class="btn btn-outline-dark px-2" onclick="FPStore.incrementQuantity('${item.id}', event)" title="Añadir 1 producto más"><i class="bi bi-plus-lg"></i></button>
+                                            <button class="btn btn-outline-danger px-2" onclick="FPStore.removeFromCart('${item.id}', event)" title="Eliminar producto"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        if (cartSummary) {
+                            cartSummary.classList.remove('d-none');
+                            const iva = totalSum * 0.16;
+                            document.getElementById('cart-iva-amount').textContent = `$${iva.toFixed(2)} MXN`;
+                            document.getElementById('cart-total-amount').textContent = `$${totalSum.toFixed(2)} MXN`;
+                        }
+                    }
+                }
+
+                const favContainer = document.getElementById('fav-items-container');
+                if (favContainer) {
+                    if (favs.length === 0) {
+                        favContainer.innerHTML = `<p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>`;
+                    } else {
+                        favContainer.innerHTML = favs.map(item => `
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom" onclick="event.stopPropagation();">
+                                <span class="text-truncate me-2 small text-muted" style="max-width: 150px;" title="${item.name}">${item.name}</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-dark p-1 me-1" title="Añadir al carrito" onclick="FPStore.addToCart({id: '${item.id}', name: '${item.name}', price: ${item.price}, category: '${item.category || 'General'}'}); event.stopPropagation();"><i class="bi bi-bag-plus"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger p-1" title="Eliminar" onclick="FPStore.toggleFavorite({id: '${item.id}'}, event)"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            },
+
+            checkoutWhatsApp: (phone = "5215500000000") => {
+                const cart = FPStore.getCart();
+                if (cart.length === 0) {
+                    alert("Tu carrito está vacío.");
+                    return;
+                }
+                let total = 0;
+                let message = "Hola, me gustaría realizar el pedido de los siguientes artículos de FP Essentials:%0A";
+                cart.forEach((item, index) => {
+                    const subtotal = item.price * item.quantity;
+                    total += subtotal;
+                    message += `%0A${index + 1}. *${item.name}* (Cantidad: ${item.quantity}) - Cat: ${item.category || 'General'} - $${subtotal.toFixed(2)} MXN`;
+                });
+                const iva = total * 0.16;
+                message += `%0A%0A*I.V.A. (16% incl.):* $${iva.toFixed(2)} MXN`;
+                message += `%0A*Total de la compra:* $${total.toFixed(2)} MXN`;
+                window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+            }
+        };
+
+        // Función para abrir el modal detallado de producto (Homologado con Tienda)
+        function openProductModal(id, name, price, category, desc, img, stock) {
+            document.getElementById('modalProdTitle').textContent = name;
+            document.getElementById('modalProdCategory').textContent = category;
+            document.getElementById('modalProdPrice').textContent = `$${price.toFixed(2)} MXN`;
+            document.getElementById('modalProdDesc').textContent = desc;
+            document.getElementById('modalProdImg').src = img;
+            document.getElementById('modalProdStock').textContent = `Stock limitado (${stock} disponibles)`;
+
+            const addBtn = document.getElementById('modalAddCartBtn');
+            addBtn.onclick = function() {
+                FPStore.addToCart({id: id, name: name, price: price, category: category});
+                bootstrap.Modal.getInstance(document.getElementById('productDetailModal')).hide();
+            };
+
+            const favBtn = document.getElementById('modalFavBtn');
+            favBtn.onclick = function(e) {
+                FPStore.toggleFavorite({id: id, name: name, price: price, category: category}, e);
+                updateModalFavIcon(id);
+            };
+            updateModalFavIcon(id);
+
+            new bootstrap.Modal(document.getElementById('productDetailModal')).show();
+        }
+
+        function updateModalFavIcon(id) {
+            const favBtn = document.getElementById('modalFavBtn');
+            if (FPStore.isFavorite(id)) {
+                favBtn.innerHTML = '<i class="bi bi-heart-fill text-vino"></i>';
+            } else {
+                favBtn.innerHTML = '<i class="bi bi-heart"></i>';
+            }
+        }
+
+        // Buscador Inteligente Funcional
+        function handleGlobalSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+            if (!query) return;
+
+            if (query.includes('oferta') || query.includes('descuento') || query.includes('pagina 2') || query.includes('página 2')) {
+                const modal = new bootstrap.Modal(document.getElementById('modalVerTodoOfertas'));
+                modal.show();
+            } else if (query.includes('mas vendido') || query.includes('más vendido') || query.includes('pagina 3') || query.includes('página 3')) {
+                const modal = new bootstrap.Modal(document.getElementById('modalVerTodoMasVendidos'));
+                modal.show();
+            } else if (query.includes('medida') || query.includes('talla') || query.includes('ayuda') || query.includes('politica') || query.includes('envio')) {
+                window.location.href = 'ayuda.html';
+            } else if (query.includes('nosotros') || query.includes('quienes somos')) {
+                window.location.href = 'nosotros.html';
+            } else {
+                // Redirigir a tienda con parámetro de búsqueda o sección
+                window.location.href = `tienda.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            FPStore.updateUI();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FP Essentials | Ayuda</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Estilos interactivos para la sección de Ayuda -->
+    <style>
+        .faq-card {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .faq-card:has(.collapse.show) {
+            border-color: #000 !important;
+            background-color: #f0f0f0 !important;
+        }
+
+        .faq-toggle-icon::after {
+            content: "◎";
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .faq-button:not(.collapsed) .faq-toggle-icon::after {
+            content: "◉";
+            color: #000;
+        }
+
+        /* Estilo para tarjetas clickeables (Materiales y Tabla de Tallas) */
+        .interactive-card {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            border-color: #000 !important;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+        }
+
+        /* Indicador dinámico visual para pestañas de Tallas */
+        #tallasTabs .nav-link {
+            background-color: #f8f9fa;
+            color: #212529;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s ease;
+        }
+        #tallasTabs .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        #tallasTabs .nav-link.active {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            border-color: #212529 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ENCABEZADO Y NAVEGACIÓN -->
+    <header class="bg-header py-3">
+        <div class="container">
+            <div class="row align-items-center mb-2">
+                <!-- Logotipo de la marca -->
+                <div class="col-6 col-md-3">
+                    <a href="index.html" class="text-decoration-none d-inline-block">
+                        <img src="img/logo.png" alt="FP Essentials Logo" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/120x40?text=LOGO'">
+                    </a>
+                </div>
+
+                <!-- Buscador Global de la Página (Header) -->
+                <div class="col-12 col-md-6 order-3 order-md-2 mt-2 mt-md-0">
+                    <form class="d-flex" role="search" onsubmit="handleHeaderSearch(event)">
+                        <div class="input-group">
+                            <input id="headerSearchInput" class="form-control search-input px-3" type="search" placeholder="Buscar productos, secciones..." aria-label="Buscar">
+                            <button class="btn search-btn text-muted px-3" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Iconos de interacción actualizados al estándar aprobado -->
+                <div class="col-6 col-md-3 order-2 order-md-3 text-end">
+                    <!-- Favoritos con menú desplegable (Dropdown) -->
+                    <div class="dropdown d-inline-block me-2">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownFavoritos" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Favoritos">
+                            <i class="bi bi-heart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 fav-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownFavoritos" style="width: 300px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mis Favoritos</span>
+                                <i class="bi bi-heart-fill text-vino"></i>
+                            </li>
+                            <div id="fav-items-container">
+                                <p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <!-- Carrito de compras rectangular desplegable -->
+                    <div class="dropdown d-inline-block">
+                        <a href="#" class="text-dark fs-5 position-relative text-decoration-none dropdown-toggle-no-arrow" id="dropdownCarrito" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" aria-label="Carrito">
+                            <i class="bi bi-bag"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1 cart-count" style="font-size: 0.6rem;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="dropdownCarrito" style="width: 380px; font-size: 0.9rem;">
+                            <li class="fw-bold text-dark mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <span>Mi Carrito de Compras</span>
+                                <i class="bi bi-bag-check text-vino"></i>
+                            </li>
+                            <div id="cart-items-container">
+                                <p class="text-muted text-center py-2 small m-0">Tu carrito está vacío.</p>
+                            </div>
+                            
+                            <!-- Sección rectangular de Totales e I.V.A. -->
+                            <div id="cart-summary-container" class="border-top pt-2 mt-2 d-none">
+                                <div class="d-flex justify-content-between text-muted small mb-1">
+                                    <span>I.V.A. (16% incluido):</span>
+                                    <span id="cart-iva-amount">$0.00 MXN</span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold text-dark fs-6 mb-3">
+                                    <span>Total:</span>
+                                    <span id="cart-total-amount" class="text-vino">$0.00 MXN</span>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm w-100 rounded-pill fw-semibold shadow-sm" onclick="FPStore.checkoutWhatsApp()">
+                                    <i class="bi bi-whatsapp me-1"></i> Enviar pedido por WhatsApp
+                                </button>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="navbar navbar-expand-md navbar-light p-0 pt-2 border-top border-secondary border-opacity-10">
+                <div class="container p-0">
+                    <button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Navegación">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                        <ul class="navbar-nav gap-md-5 text-center">
+                            <li class="nav-item"><a class="nav-link text-dark px-2" href="index.html">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark px-2" href="tienda.html">Tienda</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark px-2" href="nosotros.html">Nosotros</a></li>
+                            <li class="nav-item"><a class="nav-link active fw-bold text-dark border-bottom border-2 border-dark px-2" href="ayuda.html">Ayuda</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. HERO BANNER DE AYUDA -->
+        <section class="py-5 text-center mb-5 position-relative text-white" style="background-image: url('Img/Banner-ayuda.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+            
+            <div class="container position-relative z-1 py-4">
+                <h1 class="display-4 title-script text-white mb-4">¿En qué podemos ayudarte?</h1>
+                
+                <!-- Buscador del Centro de Ayuda (Abre modal y filtra preguntas) -->
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <form class="input-group shadow-sm rounded-pill overflow-hidden bg-white" onsubmit="handleHelpSearch(event)">
+                            <input id="helpSearchInput" type="search" class="form-control border-0 px-4 py-2" placeholder="Buscar en el centro de ayuda..." aria-label="Buscar en ayuda">
+                            <button class="btn bg-white text-muted px-3 border-0" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- 3. TARJETAS DESTACADAS SUPERIORES -->
+            <section class="mb-5">
+                <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+                    <div class="col">
+                        <a href="#faq-section" class="text-decoration-none">
+                            <div class="p-4 rounded-4 shadow-sm h-100" style="background-color: var(--cerulean-blue);">
+                                <i class="bi bi-chat-left-dots fs-1 text-dark mb-2 d-block"></i>
+                                <h3 class="h5 fw-bold text-dark m-0">Preguntas frecuentes</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#politicas-section" class="text-decoration-none">
+                            <div class="p-4 rounded-4 shadow-sm h-100" style="background-color: var(--cerulean-blue);">
+                                <i class="bi bi-box-seam fs-1 text-dark mb-2 d-block"></i>
+                                <h3 class="h5 fw-bold text-dark m-0">Entregas y devoluciones</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#tallas-section" class="text-decoration-none">
+                            <div class="p-4 rounded-4 shadow-sm h-100" style="background-color: var(--cerulean-blue);">
+                                <i class="bi bi-gem fs-1 text-dark mb-2 d-block"></i>
+                                <h3 class="h5 fw-bold text-dark m-0">Guía de tallas y productos</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. PREGUNTAS FRECUENTES -->
+            <section id="faq-section" class="mb-5">
+                <h2 class="display-6 title-script text-dark mb-4">Preguntas frecuentes</h2>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                            <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mainFaq1">
+                                <span class="fw-semibold text-dark">¿Cómo puedo realizar un pedido?</span>
+                                <span class="faq-toggle-icon ms-2"></span>
+                            </button>
+                            <div id="mainFaq1" class="collapse"><div class="p-3 pt-0 text-muted small">Agrega tus productos al carrito de WhatsApp y da clic en "Comprar" para enviarnos tu lista directamente por chat. Ahí coordinaremos el día y horario de entrega. Puedes pagar mediante transferencia o acordar la entrega con un apartado previo del 10% para pago contra entrega.</div></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                            <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mainFaq2">
+                                <span class="fw-semibold text-dark">¿Los productos que aparecen en la página están disponibles?</span>
+                                <span class="faq-toggle-icon ms-2"></span>
+                            </button>
+                            <div id="mainFaq2" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí! Todo lo que ves publicado está disponible para entrega inmediata. En joyería manejamos piezas de stock rotativo, ofertas y saldos exclusivos que vuelan rápido. En maquillaje combinamos piezas de oportunidad con productos básicos que mantenemos de forma continua en catálogo. De todas formas, si ves una joya especial o un producto de maquillaje de oportunidad, ¡te sugerimos apartarlo de inmediato antes de que se agote!</div></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                            <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mainFaq3">
+                                <span class="fw-semibold text-dark">¿Qué métodos de pago aceptan?</span>
+                                <span class="faq-toggle-icon ms-2"></span>
+                            </button>
+                            <div id="mainFaq3" class="collapse"><div class="p-3 pt-0 text-muted small">Una vez que tu carrito te redirija a nuestro chat de WhatsApp, coordinaremos y acordaremos el método de pago que mejor se adapte a tus necesidades (como transferencias electrónicas o depósitos).</div></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                            <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mainFaq4">
+                                <span class="fw-semibold text-dark">¿Cuánto tarda en llegar mi pedido?</span>
+                                <span class="faq-toggle-icon ms-2"></span>
+                            </button>
+                            <div id="mainFaq4" class="collapse"><div class="p-3 pt-0 text-muted small">Al no manejar envíos por paquetería, no contamos con un tiempo de traslado o envío estándar. Una vez confirmada y realizada tu compra, se cuenta con un plazo máximo de 15 días continuos para coordinar y concretar la entrega personal a través de WhatsApp en el punto y horario que mejor se adapte a tus tiempos dentro de las opciones disponibles.</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-link text-dark fw-bold text-decoration-underline small p-0 border-0 shadow-none" data-bs-toggle="modal" data-bs-target="#allFaqModal">
+                        Ver todas las preguntas &rarr;
+                    </button>
+                </div>
+            </section>
+
+            <!-- 5. POLÍTICAS DE ENTREGA Y DEVOLUCIONES -->
+            <section id="politicas-section" class="mb-5">
+                <h2 class="display-6 title-script text-dark mb-4">Políticas de entrega y devoluciones</h2>
+                
+                <p class="small text-muted mb-4">
+                    En <strong>PF Essentials</strong> nos esforzamos por brindarte un servicio transparente, seguro y eficiente. A continuación, detallamos las bases de nuestras entregas, devoluciones y garantías.
+                </p>
+
+                <div class="row g-4 mb-4">
+                    <!-- Tarjeta Resumida de Entregas y Envíos -->
+                    <div class="col-lg-6">
+                        <div class="p-4 bg-light rounded-3 border h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-truck me-2 text-vino"></i>Políticas de Entrega y Envíos (PF Essentials)</h3>
+                                <p class="small text-muted mb-2">
+                                    Nuestras entregas son <strong>exclusivamente personales</strong> en estaciones seleccionadas del Metro y Metrobús de la CDMX.
+                                </p>
+                                <ul class="small text-muted ps-3 mb-3">
+                                    <li><strong>Modalidad:</strong> Entregas personales sin envíos por paquetería local ni nacional.</li>
+                                    <li><strong>Cobertura gratuita:</strong> Metrobús L1 (18 de Marzo a Buenavista), L5 (San Juan de Aragón a Oriente 101), L6 completa; Metro L2 (Bellas Artes, Pino Suárez, Chabacano), L4, L5 y L6 completas.</li>
+                                    <li><strong>Horario y Agendamiento:</strong> Atención de 12:00 p.m. a 5:00 p.m., programando con mínimo 2 días de anticipación.</li>
+                                    <li><strong>Tolerancia:</strong> 15 minutos máximos de espera en el punto pactado.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                                <span class="small text-muted fw-semibold">Entregas coordinadas por WhatsApp</span>
+                                <button type="button" class="btn btn-outline-dark btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalPoliticasEntregas">
+                                    Ver políticas completas &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Resumida de Devoluciones y Garantías -->
+                    <div class="col-lg-6">
+                        <div class="p-4 bg-light rounded-3 border h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-arrow-counterclockwise me-2 text-vino"></i>Políticas de Cambios, Devoluciones y Garantías</h3>
+                                <p class="small text-muted mb-2">
+                                    La <strong>satisfacción de nuestros clientes</strong> y la <strong>higiene de nuestros productos</strong> son nuestra máxima prioridad.
+                                </p>
+                                <ul class="small text-muted ps-3 mb-3">
+                                    <li><strong>Plazo de reporte:</strong> Reporte estricto dentro de las <strong>24 horas posteriores</strong> a la entrega personal vía WhatsApp.</li>
+                                    <li><strong>Normativa de Maquillaje:</strong> Por salud e higiene, <strong>no hay cambios si el producto fue abierto o probado</strong> (salvo defectos comprobables de lote u origen).</li>
+                                    <li><strong>Garantía en Joyería:</strong> Cobertura exclusiva por <strong>defectos de fábrica</strong> reportados en las primeras 24 horas. Excluye mal uso y contacto con químicos.</li>
+                                    <li><strong>Gestión de Cambios:</strong> Inspección y entrega física únicamente en puntos autorizados con un plazo máximo de <strong>15 días naturales</strong>.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                                <span class="small text-muted fw-semibold">Atención vía WhatsApp</span>
+                                <button type="button" class="btn btn-outline-dark btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalPoliticasDevoluciones">
+                                    Ver políticas completas &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pasos numerados -->
+                <div class="row g-3 mb-3 text-center">
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border fw-semibold text-dark">
+                            <span class="badge bg-dark rounded-circle me-1">1</span> Agenda tu cita con 2 días de anticipación
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border fw-semibold text-dark">
+                            <span class="badge bg-dark rounded-circle me-1">2</span> Acude puntualmente al punto autorizado
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border fw-semibold text-dark">
+                            <span class="badge bg-dark rounded-circle me-1">3</span> Inspecciona y valida tu producto al momento
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. GUÍA DE TALLAS Y PRODUCTOS -->
+            <section id="tallas-section" class="mb-5">
+                <h2 class="display-6 title-script text-dark mb-3">Guía de tallas y productos</h2>
+                
+                <!-- Pestañas interactivas de categoría con indicador dinámico -->
+                <ul class="nav nav-pills gap-2 mb-4" id="tallasTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active btn-sm rounded-pill px-4 fw-semibold" id="tab-anillos" data-bs-toggle="pill" data-bs-target="#content-anillos" type="button" role="tab" aria-controls="content-anillos" aria-selected="true">Anillos</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btn-sm rounded-pill px-4 fw-semibold" id="tab-pulseras" data-bs-toggle="pill" data-bs-target="#content-pulseras" type="button" role="tab" aria-controls="content-pulseras" aria-selected="false">Pulseras</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btn-sm rounded-pill px-4 fw-semibold" id="tab-collares" data-bs-toggle="pill" data-bs-target="#content-collares" type="button" role="tab" aria-controls="content-collares" aria-selected="false">Collares</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btn-sm rounded-pill px-4 fw-semibold" id="tab-aretes" data-bs-toggle="pill" data-bs-target="#content-aretes" type="button" role="tab" aria-controls="content-aretes" aria-selected="false">Aretes</button>
+                    </li>
+                </ul>
+
+                <div class="row g-4">
+                    <!-- Tarjeta interactiva de la Tabla: Al hacer clic desglosa el Modal completo -->
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#allTallasModal">
+                            <div class="tab-content" id="tallasTabsContent">
+                                
+                                <!-- Tabla Anillos -->
+                                <div class="tab-pane fade show active" id="content-anillos" role="tabpanel" aria-labelledby="tab-anillos">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h3 class="h6 fw-bold text-dark m-0">5 Medidas más comunes en mujeres (Anillos)</h3>
+                                        <i class="bi bi-arrows-angle-expand text-muted small"></i>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-sm text-center small text-muted m-0">
+                                            <thead>
+                                                <tr class="border-bottom text-dark">
+                                                    <th>Talla</th>
+                                                    <th>Diámetro</th>
+                                                    <th>Circunferencia</th>
+                                                    <th>Talla US</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>5</td><td>15.7 mm</td><td>49.3 mm</td><td>5 US</td></tr>
+                                                <tr><td>6</td><td>16.5 mm</td><td>51.8 mm</td><td>6 US</td></tr>
+                                                <tr><td>7</td><td>17.3 mm</td><td>54.4 mm</td><td>7 US</td></tr>
+                                                <tr><td>8</td><td>18.1 mm</td><td>56.9 mm</td><td>8 US</td></tr>
+                                                <tr><td>9</td><td>18.9 mm</td><td>59.5 mm</td><td>9 US</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Tabla Pulseras -->
+                                <div class="tab-pane fade" id="content-pulseras" role="tabpanel" aria-labelledby="tab-pulseras">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h3 class="h6 fw-bold text-dark m-0">5 Medidas más comunes en mujeres (Pulseras)</h3>
+                                        <i class="bi bi-arrows-angle-expand text-muted small"></i>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-sm text-center small text-muted m-0">
+                                            <thead>
+                                                <tr class="border-bottom text-dark">
+                                                    <th>Tamaño</th>
+                                                    <th>Longitud</th>
+                                                    <th>Ajuste</th>
+                                                    <th>Talla Estándar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>XS</td><td>15 cm</td><td>Muy Ajustada</td><td>Muñeca delgada</td></tr>
+                                                <tr><td>S</td><td>16.5 cm</td><td>Ajustado</td><td>Pequeña</td></tr>
+                                                <tr><td>M</td><td>18 cm</td><td>Estándar</td><td>Mediana habitual</td></tr>
+                                                <tr><td>L</td><td>19.5 cm</td><td>Holgado</td><td>Grande</td></tr>
+                                                <tr><td>XL</td><td>21 cm</td><td>Suelto</td><td>Extra grande</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Tabla Collares -->
+                                <div class="tab-pane fade" id="content-collares" role="tabpanel" aria-labelledby="tab-collares">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h3 class="h6 fw-bold text-dark m-0">5 Medidas más comunes en mujeres (Collares)</h3>
+                                        <i class="bi bi-arrows-angle-expand text-muted small"></i>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-sm text-center small text-muted m-0">
+                                            <thead>
+                                                <tr class="border-bottom text-dark">
+                                                    <th>Estilo</th>
+                                                    <th>Largo (cm)</th>
+                                                    <th>Posición en cuello</th>
+                                                    <th>Uso recomendado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>Gargantilla</td><td>35 - 40 cm</td><td>Base del cuello</td><td>Dijes pequeños</td></tr>
+                                                <tr><td>Princesa</td><td>45 cm</td><td>Sobre la clavícula</td><td>Estándar ideal</td></tr>
+                                                <tr><td>Matiné</td><td>50 - 55 cm</td><td>Encima del busto</td><td>Escotes o capas</td></tr>
+                                                <tr><td>Ópera</td><td>60 - 70 cm</td><td>En el busto</td><td>Elegante formal</td></tr>
+                                                <tr><td>Cuerda</td><td>80 cm+</td><td>Por debajo del busto</td><td>Doble vuelta</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Tabla Aretes -->
+                                <div class="tab-pane fade" id="content-aretes" role="tabpanel" aria-labelledby="tab-aretes">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h3 class="h6 fw-bold text-dark m-0">5 Medidas más comunes en mujeres (Aretes)</h3>
+                                        <i class="bi bi-arrows-angle-expand text-muted small"></i>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-sm text-center small text-muted m-0">
+                                            <thead>
+                                                <tr class="border-bottom text-dark">
+                                                    <th>Tipo</th>
+                                                    <th>Diámetro/Largo</th>
+                                                    <th>Estilo</th>
+                                                    <th>Visibilidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>Broquel XS</td><td>3 - 4 mm</td><td>Pegado a lóbulo</td><td>Sutil / Diario</td></tr>
+                                                <tr><td>Broquel M</td><td>6 - 8 mm</td><td>Punto de luz</td><td>Elegante sutil</td></tr>
+                                                <tr><td>Arracada S</td><td>10 - 15 mm</td><td>Aro pequeño</td><td>Versátil</td></tr>
+                                                <tr><td>Arracada M</td><td>20 - 30 mm</td><td>Aro mediano</td><td>Destacado</td></tr>
+                                                <tr><td>Colgantes</td><td>40 - 60 mm</td><td>Largo estilizado</td><td>Fiesta / Eventos</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recuadro para cómo medir tu dedo (Interactivo con Modal) -->
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#modalMedida" style="cursor: pointer;">
+                           <h3 class="h6 fw-bold text-dark mb-3">Cómo medir tu dedo</h3>
+                            <div class="mb-3 overflow-hidden rounded-3 text-center">
+                                <img src="Img/Cómomedir tu dedop.jpeg" alt="Guía para medir el dedo" class="img-fluid w-100 object-fit-cover" style="height: 150px;" onerror="this.src='https://via.placeholder.com/400x300?text=Guia+de+Medicion'">
+                            </div>
+                            <p class="small text-muted m-0">Haz clic para ampliar la guía y conocer los pasos detallados de medición.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. MATERIALES Y CUIDADOS -->
+            <section class="mb-5">
+                <h2 class="display-6 title-script text-dark mb-4">Materiales y cuidados</h2>
+                
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                    
+                    <!-- Tarjeta Oro completa clickeable -->
+                    <div class="col">
+                        <div class="p-3 bg-light rounded-3 border text-center h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#modalOro">
+                            <div class="mb-3 overflow-hidden rounded-3">
+                                <img src="Img/Material-oro.jpg" alt="Cuidado del Oro" class="img-fluid w-100 object-fit-cover" style="height: 120px;" onerror="this.src='https://via.placeholder.com/300x200?text=ORO'">
+                            </div>
+                            <h3 class="h6 fw-bold text-dark text-uppercase mb-1">ORO</h3>
+                            <p class="small text-muted m-0" style="font-size: 0.75rem;">Elegancia eterna, máxima durabilidad y resistencia al paso del tiempo.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Plata completa clickeable -->
+                    <div class="col">
+                        <div class="p-3 bg-light rounded-3 border text-center h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#modalPlata">
+                            <div class="mb-3 overflow-hidden rounded-3">
+                                <img src="Img/Material-plata.jpg" alt="Cuidado de la Plata" class="img-fluid w-100 object-fit-cover" style="height: 120px;" onerror="this.src='https://via.placeholder.com/300x200?text=PLATA+.925'">
+                            </div>
+                            <h3 class="h6 fw-bold text-dark text-uppercase mb-1">PLATA .925</h3>
+                            <p class="small text-muted m-0" style="font-size: 0.75rem;">Brillo radiante y versatilidad ideal para el uso diario.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Piedras y Perlas completa clickeable -->
+                    <div class="col">
+                        <div class="p-3 bg-light rounded-3 border text-center h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#modalPiedras">
+                            <div class="mb-3 overflow-hidden rounded-3">
+                                <img src="Img/material-piedras.jpg" alt="Cuidado de Piedras y Perlas" class="img-fluid w-100 object-fit-cover" style="height: 120px;" onerror="this.src='https://via.placeholder.com/300x200?text=PIEDRAS+Y+PERLAS'">
+                            </div>
+                            <h3 class="h6 fw-bold text-dark text-uppercase mb-1">PIEDRAS Y PERLAS</h3>
+                            <p class="small text-muted m-0" style="font-size: 0.75rem;">Gemas auténticas y perlas orgánicas llenas de personalidad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Oro Laminado / Acero completa clickeable -->
+                    <div class="col">
+                        <div class="p-3 bg-light rounded-3 border text-center h-100 interactive-card" data-bs-toggle="modal" data-bs-target="#modalAcero">
+                            <div class="mb-3 overflow-hidden rounded-3">
+                                <img src="Img/material-acero.jpg" alt="Cuidado de Oro Laminado y Acero" class="img-fluid w-100 object-fit-cover" style="height: 120px;" onerror="this.src='https://via.placeholder.com/300x200?text=ORO+LAMINADO+/+ACERO'">
+                            </div>
+                            <h3 class="h6 fw-bold text-dark text-uppercase mb-1">ORO LAMINADO / ACERO</h3>
+                            <p class="small text-muted m-0" style="font-size: 0.75rem;">Resistencia superior al agua, hipoalergénico e inoxidable.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 5. PIE DE PÁGINA (FOOTER) -->
+    <footer class="bg-footer py-4 mt-5">
+        <div class="container">
+            <div class="row g-4 footer-links">
+                <!-- Columna 1: Company -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Company</h3>
+                    <a href="index.html">Home</a>
+                    <a href="nosotros.html">About</a>
+                    <a href="#">Solutions</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Team</a>
+                    <a href="#">Career</a>
+                </div>
+
+                <!-- Columna 2: Documentation -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Documentation</h3>
+                    <a href="ayuda.html">Help Centre</a>
+                    <a href="ayuda.html">Contact</a>
+                    <a href="ayuda.html">FAQ</a>
+                    <a href="ayuda.html">Privacy Policy</a>
+                </div>
+
+                <!-- Columna 3: Social -->
+                <div class="col-6 col-md-3">
+                    <h3 class="footer-title">Social</h3>
+                    <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook me-2"></i>Facebook</a>
+                    <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram me-2"></i>Instagram</a>
+                    <a href="https://tiktok.com" target="_blank"><i class="bi bi-tiktok me-2"></i>TikTok</a>
+                </div>
+
+                <!-- Columna 4: Síguenos / Preguntas -->
+                <div class="col-6 col-md-3">
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark fw-normal border px-2 py-1">SÍGUENOS EN <i class="bi bi-heart text-vino ms-1"></i></span>
+                    </div>
+                    <h3 class="footer-title mb-1">PREGUNTAS</h3>
+                    <p class="small text-dark mb-2">Lun - vie en un plazo 24 a 48 horas</p>
+                    <p class="small text-dark mb-0"><i class="bi bi-envelope me-1"></i> correo@gmail.com</p>
+                </div>
+            </div>
+
+            <hr class="my-4 text-secondary border-opacity-25">
+
+            <div class="text-center text-dark small">
+                © 2024 Glow Self Care Box. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: POLÍTICAS COMPLETAS DE ENTREGA Y ENVÍOS -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalPoliticasEntregas" tabindex="-1" aria-labelledby="modalPoliticasEntregasLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <div>
+                        <h1 class="modal-title h4 fw-bold text-dark" id="modalPoliticasEntregasLabel">Términos y Condiciones de Entrega (PF Essentials)</h1>
+                        <p class="text-muted small mb-0">Información detallada sobre modalidades, puntos autorizados, horarios y garantías de entrega.</p>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4">
+                        En <strong>PF Essentials</strong> nos esforzamos por brindarte un servicio transparente, seguro y eficiente. A continuación, detallamos los términos y condiciones que rigen la entrega de nuestros productos de joyería y maquillaje.
+                    </p>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">1. Modalidad de Entrega</h5>
+                        <p class="small text-muted mb-0">
+                            Por el momento, <strong>PF Essentials no cuenta con envíos locales dentro del área metropolitana ni envíos nacionales a la República Mexicana</strong>. Todas nuestras ventas se entregan exclusivamente mediante <strong>entregas personales</strong> en los puntos y líneas autorizados.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">2. Puntos de Entrega Autorizados y Costos</h5>
+                        <p class="small text-muted mb-1"><strong>Entregas Gratuitas (Sin costo adicional):</strong></p>
+                        <ul class="small text-muted ps-3 mb-2">
+                            <li><strong>Metrobús:</strong>
+                                <ul>
+                                    <li><strong>Línea 1:</strong> Tramo de <strong>De 18 de Marzo a Buenavista</strong>.</li>
+                                    <li><strong>Línea 5:</strong> Tramo de <strong>San Juan de Aragón a Oriente 101</strong>.</li>
+                                    <li><strong>Línea 6:</strong> Toda la línea.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Metro:</strong>
+                                <ul>
+                                    <li><strong>Línea 2:</strong> Estaciones <strong>Bellas Artes, Pino Suárez y Chabacano</strong>.</li>
+                                    <li><strong>Línea 4:</strong> Toda la línea.</li>
+                                    <li><strong>Línea 5:</strong> Toda la línea.</li>
+                                    <li><strong>Línea 6:</strong> Toda la línea.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p class="small text-muted mb-0">
+                            <strong>Entregas Fuera de Cobertura Base (Con costo extra):</strong> Si solicitas la entrega en una estación o ubicación fuera de las líneas y tramos autorizados, la factibilidad se evaluará según la distancia y disponibilidad del equipo. De ser posible, se aplicará un <strong>costo adicional que deberá ser cubierto antes de concretar la cita</strong>.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">3. Horarios y Coordinación de Citas</h5>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li><strong>Horario de atención para entregas:</strong> De <strong>12:00 p.m. a 5:00 p.m.</strong></li>
+                            <li><strong>Días de entrega:</strong> Varían según la disponibilidad de nuestras colaboradoras; se informarán directamente al momento de realizar tu compra y podrán ser publicados periódicamente en nuestra página web o redes sociales.</li>
+                            <li><strong>Agendamiento:</strong> Debes agendar tu cita con un <strong>mínimo de 2 días de anticipación</strong> posteriores al pago.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">4. Tolerancia de Espera y Puntualidad</h5>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li>Otorgamos un tiempo máximo de <strong>tolerancia de 15 minutos</strong> a partir de la hora pactada en la estación acordada.</li>
+                            <li>Transcurrido este tiempo sin que el cliente se presente o responda en el punto de encuentro, la colaboradora se retirará y la entrega deberá ser <strong>reagendada sujeto a disponibilidad</strong> (lo cual podría generar costos adicionales).</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">5. Plazo Límite para Recoger el Pedido</h5>
+                        <p class="small text-muted mb-0">
+                            Una vez realizado el pago, cuentas con un <strong>plazo máximo de 15 días naturales</strong> para coordinar y acudir a la entrega de tu producto. Transcurridos estos 15 días sin contacto ni concreción del encuentro, el pedido se considerará <strong>oficialmente cancelado y/o en abandono</strong>.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">6. Requisitos para la Recepción</h5>
+                        <p class="small text-muted mb-1">Al momento del encuentro en la estación acordada, el cliente deberá:</p>
+                        <ol class="small text-muted ps-3 mb-0">
+                            <li>Presentar su <strong>número de pedido asignado</strong> durante la compra.</li>
+                            <li>Presentar su <strong>comprobante de pago digital</strong>.</li>
+                            <li><strong>Revisar e inspeccionar detalladamente el producto</strong> entregado para confirmar su buen estado, validando la <strong>conformidad absoluta de su compra en el acto</strong>.</li>
+                        </ol>
+                    </div>
+
+                    <div>
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">7. Envíos Externos Solicitados por el Cliente</h5>
+                        <p class="small text-muted mb-1">
+                            Si decides gestionar la recolección de tu pedido por medio de plataformas de transporte o mensajería externa (Uber Flash, DiDi Entrega o paqueterías privadas):
+                        </p>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li>El costo del servicio corre <strong>totalmente por tu cuenta</strong>.</li>
+                            <li><strong>Deslinde de responsabilidad:</strong> La responsabilidad de PF Essentials concluye en el <strong>momento exacto en que la mercancía es entregada al repartidor de la plataforma externa</strong>. No nos hacemos responsables por pérdidas, daños o demoras ocasionadas por dicho servicio de terceros.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                    <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: POLÍTICAS DE CAMBIOS, DEVOLUCIONES Y GARANTÍAS -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalPoliticasDevoluciones" tabindex="-1" aria-labelledby="modalPoliticasDevolucionesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <div>
+                        <h1 class="modal-title h4 fw-bold text-dark" id="modalPoliticasDevolucionesLabel">POLÍTICAS DE CAMBIOS, DEVOLUCIONES Y GARANTÍAS</h1>
+                        <p class="text-muted small mb-0">PF Essentials</p>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4">
+                        En <strong>PF Essentials</strong>, la satisfacción de nuestros clientes y la higiene de nuestros productos son nuestra máxima prioridad. A continuación, detallamos las condiciones bajo las cuales aplican cambios, devoluciones y garantías.
+                    </p>
+
+                    <div class="mb-4">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">1. Plazo y Medio de Reporte</h5>
+                        <p class="small text-muted mb-2">
+                            Cualquier solicitud de cambio, devolución o reporte de inconformidad por defecto de fábrica, producto equivocado o faltante debe realizarse dentro de un <strong>plazo estricto de 24 horas posteriores a la entrega personal</strong>.
+                        </p>
+                        <p class="small text-muted mb-1">El reporte debe enviarse vía <strong>WhatsApp</strong>, adjuntando:</p>
+                        <ol class="small text-muted ps-3 mb-0">
+                            <li>Número de pedido y comprobante de pago.</li>
+                            <li>Fotografías y/o videos claros que muestren la condición del producto o empaque.</li>
+                        </ol>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">2. Normativa para Maquillaje</h5>
+                        <p class="small text-muted mb-2">
+                            <strong>Regla General por Higiene:</strong> Por estrictas normas de salud e higiene, <strong>no se aceptan cambios ni devoluciones en productos de maquillaje que hayan sido abiertos, probados, usados o que tengan los sellos de seguridad violados</strong>.
+                        </p>
+                        <p class="small text-muted mb-1"><strong>Excepciones Autorizadas:</strong></p>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li class="mb-2"><strong>Confusión de tono o producto:</strong> Se podrá revisar una solución únicamente si el producto se conserva <strong>100% sellado de fábrica</strong>, con sus empaques y sellos originales intactos.</li>
+                            <li><strong>Defectos de lote u origen:</strong> En casos extraordinarios donde el maquillaje presente un defecto comprobable de origen o lote que no dependa del uso de la clienta (como presencia de hongo, alteración de fórmula o defecto en el mecanismo del empaque), <strong>se aceptará el reporte aun si el producto fue abierto</strong>, siempre y cuando se notifique dentro del plazo de 24 horas.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">3. Garantía en Joyería</h5>
+                        <p class="small text-muted mb-2">
+                            Garantizamos que todas nuestras piezas son <strong>completamente nuevas y verificadas</strong> antes de su entrega.
+                        </p>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li class="mb-2"><strong>Cobertura:</strong> La garantía aplica exclusivamente por <strong>defectos de origen o de lote</strong> reportados dentro de las primeras 24 horas tras la entrega personal.</li>
+                            <li><strong>Exclusiones:</strong> La garantía <strong>no cubre daños derivados por</strong>:
+                                <ul class="mt-1">
+                                    <li>Mal uso, negligencia o caídas.</li>
+                                    <li>Desgaste natural por uso constante.</li>
+                                    <li>Contacto con agentes químicos (como perfumes, cremas, cloro, agua salada o productos de limpieza).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">4. Proceso de Gestión, Tiempos y Reembolsos</h5>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li class="mb-2"><strong>Punto de revisión y cambio:</strong> Cualquier inspección física o cambio de mercancía aprobado se llevará a cabo <strong>únicamente en las estaciones y tramos autorizados</strong> para entrega personal (Metro y Metrobús).</li>
+                            <li class="mb-2"><strong>Plazo para realizar el cambio:</strong> Una vez acordada la solución vía WhatsApp, el cliente contará con un <strong>plazo máximo de 15 días naturales</strong> para acudir al punto de encuentro acordado para concretar el cambio físico de la pieza.</li>
+                            <li><strong>Reembolsos:</strong> En caso de que la devolución proceda y no se cuente con stock para sustituir la pieza, <strong>el reembolso se procesará utilizando el mismo método de pago</strong> realizado en la compra, dentro de un plazo a acordar con el cliente tras la evaluación del producto devuelto.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="h6 fw-bold text-dark border-bottom pb-1">5. Envíos por Servicios Externos</h5>
+                        <p class="small text-muted mb-1">
+                            En caso de que el cliente decida contratar de manera independiente un servicio de paquetería o mensajería externa (Uber Flash, DiDi Entrega o courier privado):
+                        </p>
+                        <p class="small text-muted mb-0">
+                            <strong>No aplican cambios, devoluciones ni garantías por daños, pérdidas, manipulaciones o extravíos</strong> ocurridos durante el trayecto, ya que nuestra responsabilidad concluye en el momento en que el producto es entregado al repartidor de dicha plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                    <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: PREGUNTAS FRECUENTES -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="allFaqModal" tabindex="-1" aria-labelledby="allFaqModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <div>
+                        <h1 class="modal-title h4 fw-bold text-dark" id="allFaqModalLabel">Todas las Preguntas Frecuentes</h1>
+                        <p class="text-muted small mb-0">Encuentra respuestas a todas tus dudas sobre nuestros productos, pedidos, entregas y devoluciones.</p>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    
+                    <!-- Categoría 1: Productos y Disponibilidad -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Productos y Disponibilidad</h5>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq1">
+                                        <span class="fw-semibold text-dark">¿Los productos que aparecen en la página están disponibles?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq1" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí! Todo lo que ves publicado está disponible para entrega inmediata. En joyería manejamos piezas de stock rotativo, ofertas y saldos exclusivos que vuelan rápido. En maquillaje combinamos piezas de oportunidad con productos básicos que mantenemos de forma continua en catálogo. De todas formas, si ves una joya especial o un producto de maquillaje de oportunidad, ¡te sugerimos apartarlo de inmediato antes de que se agote!</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq2">
+                                        <span class="fw-semibold text-dark">¿Los colores de los productos pueden variar respecto a las fotografías?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq2" class="collapse"><div class="p-3 pt-0 text-muted small">Hacemos nuestro mejor esfuerzo para mostrar los tonos reales; sin embargo, debido a la iluminación de las fotografías y la configuración de cada pantalla (móvil o monitor), puede haber ligeras variaciones en el color.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq3">
+                                        <span class="fw-semibold text-dark">¿Los productos de maquillaje son originales?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq3" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí! Al ser una marca de reventa especializada en excedentes, saldos y liquidaciones de marcas reconocidas, garantizamos la autenticidad de nuestros productos de maquillaje.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq4">
+                                        <span class="fw-semibold text-dark">¿Los productos de maquillaje están sellados?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq4" class="collapse"><div class="p-3 pt-0 text-muted small">Al tratarse de productos provenientes de lotes de liquidación y ofertas, algunos artículos pueden venir sellados y otros no. Esta información específica suele detallarse en la descripción de cada producto.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq5">
+                                        <span class="fw-semibold text-dark">¿Las piezas de joyería son resistentes al agua?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq5" class="collapse"><div class="p-3 pt-0 text-muted small">La resistencia depende del tipo de aleación o material de cada pieza (generalmente joyería de fantasía o acero). Para prolongar su vida útil, te recomendamos evitar el contacto directo con agua, perfumes y lociones.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq6">
+                                        <span class="fw-semibold text-dark">¿Cómo debo cuidar mis piezas de joyería para conservarlas en buen estado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq6" class="collapse"><div class="p-3 pt-0 text-muted small">Te recomendamos evitar el contacto directo con perfumes, cremas, quimicos o sudor excesivo, guardar cada pieza por separado en un lugar seco para evitar ralladuras. Para conocer el método de limpieza y mantenimiento segun el material de tu pieza, te invitamos a visitar nuestro apartado de 'Materiales y cuidados', donde encontraras la guía ideal para tus necesidades</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq7">
+                                        <span class="fw-semibold text-dark">¿Qué hago si el producto que quiero aparece agotado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq7" class="collapse"><div class="p-3 pt-0 text-muted small">Debido a nuestro modelo de stock rotativo por ofertas y liquidaciones, muchas de nuestras piezas son únicas y es muy probable que no vuelvan a estar disponibles. Sin embargo, si se trata de un producto básico de maquillaje, mantenemos reabastecimiento continuo. Te recomendamos mandarnos un mensaje directo para confirmarte si volverá a estar disponible o estar al pendiente de nuestras publicaciones y actualizaciones para no perderte las nuevas incorporaciones.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categoría 2: Pedidos y Pagos -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Pedidos y Pagos</h5>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq8">
+                                        <span class="fw-semibold text-dark">¿Cómo puedo realizar un pedido?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq8" class="collapse"><div class="p-3 pt-0 text-muted small">Agrega tus productos al carrito de WhatsApp y da clic en "Comprar" para enviarnos tu lista directamente por chat. Ahí coordinaremos el día y horario de entrega. Puedes pagar mediante transferencia o acordar la entrega con un apartado previo del 10% para pago contra entrega.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq9">
+                                        <span class="fw-semibold text-dark">¿Qué métodos de pago aceptan?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq9" class="collapse"><div class="p-3 pt-0 text-muted small">Una vez que tu carrito te redirija a nuestro chat de WhatsApp, coordinaremos y acordaremos el método de pago que mejor se adapte a tus necesidades (como transferencias electrónicas o depósitos).</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq10">
+                                        <span class="fw-semibold text-dark">¿Necesito crear una cuenta para comprar?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq10" class="collapse"><div class="p-3 pt-0 text-muted small">No, no necesitas crear ninguna cuenta. No utilizamos servidores para almacenar información personal ni datos bancarios de nuestros clientes en la página web. Todo el proceso de compra y seguimiento se gestiona directamente de forma segura por WhatsApp.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq11">
+                                        <span class="fw-semibold text-dark">¿Puedo modificar o cancelar mi pedido después de realizarlo?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq11" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí! Al gestionar tu compra directamente vía WhatsApp, puedes solicitar cambios o cancelaciones con nuestro asesor antes de acordar el pago y agendar la entrega.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq12">
+                                        <span class="fw-semibold text-dark">¿Cómo puedo saber si mi pedido fue confirmado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq12" class="collapse"><div class="p-3 pt-0 text-muted small">Tu pedido quedará confirmado al momento en que nuestro asesor te comparta tu comprobante de compra y acuerden los detalles de pago y entrega dentro del chat de WhatsApp.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq14">
+                                        <span class="fw-semibold text-dark">¿Puedo solicitar que mi pedido sea preparado para regalo?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq14" class="collapse"><div class="p-3 pt-0 text-muted small">¡Claro que sí! Contamos con empaque especial para regalo con un costo adicional. Solo avísale a tu asesor en el chat de WhatsApp al momento de coordinar tu pedido para que te comparta las opciones disponibles y lo sume a tu cuenta.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categoría 3: Entregas -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Entregas y Puntos de Encuentro (CDMX / Área Metropolitana)</h5>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq15">
+                                        <span class="fw-semibold text-dark">¿En qué zonas realizan entregas?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq15" class="collapse"><div class="p-3 pt-0 text-muted small">No realizamos envíos por paquetería a la República Mexicana, ni envíos nacionales o internacionales. Nuestras entregas son exclusivamente personales dentro del Área Metropolitana (CDMX) y se llevan a cabo solo en ciertas estaciones de las líneas 2, 4, 5 y 6 del Metro, así como en estaciones seleccionadas de las líneas 1, 5, 6 y 7 del Metrobús.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq16">
+                                        <span class="fw-semibold text-dark">¿Cuánto tarda en llegar mi pedido?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq16" class="collapse"><div class="p-3 pt-0 text-muted small">Al no manejar envíos por paquetería, no contamos con un tiempo de traslado o envío estándar. Una vez confirmada y realizada tu compra, se cuenta con un plazo máximo de 15 días continuos para coordinar y concretar la entrega personal a través de WhatsApp en el punto y horario que mejor se adapte a tus tiempos dentro de las opciones disponibles.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq17">
+                                        <span class="fw-semibold text-dark">¿Puedo elegir un horario para recibir mi pedido?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq17" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí, totalmente! Al ser entregas personales y coordinadas de forma directa vía WhatsApp, puedes acordar el día y la hora exacta que mejor se adapte a tu agenda dentro de los horarios disponibles de entrega y durante el plazo de 15 días posteriores a tu compra.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq18">
+                                        <span class="fw-semibold text-dark">¿Qué sucede si no estoy disponible para recibirlo?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq18" class="collapse"><div class="p-3 pt-0 text-muted small">Como las entregas se coordinan directamente contigo por WhatsApp, si surge algún imprevisto solo debes avisarnos con anticipación para reprogramar la cita. Recuerda que contaremos con el plazo límite de 15 días continuos a partir de tu compra para agendar una nueva fecha y concretar la entrega en las estaciones o puntos acordados.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq19">
+                                        <span class="fw-semibold text-dark">¿Puedo acordar un punto de encuentro para recoger mi pedido?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq19" class="collapse"><div class="p-3 pt-0 text-muted small">¡Sí! Las entregas se acuerdan directamente en las estaciones seleccionadas del Metro o Metrobús de tu preferencia dentro de la CDMX.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categoría 4: Cambios, Devoluciones y Garantías -->
+                    <div class="mb-2">
+                        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Cambios, Devoluciones y Garantías</h5>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq20">
+                                        <span class="fw-semibold text-dark">¿Puedo cambiar o devolver un producto?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq20" class="collapse"><div class="p-3 pt-0 text-muted small">Sí. Aceptamos cambios o devoluciones por defectos de fábrica en piezas de joyería o maquillaje, o por error en la compra siempre que el producto se mantenga 100% sellado y sin usar.
+                                        <br><b>Para conocer a detalle las condiciones, excepciones por higiene y el proceso paso a paso, te invitamos a consultar nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq21">
+                                        <span class="fw-semibold text-dark">¿Qué productos no tienen cambios o devoluciones?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq21" class="collapse"><div class="p-3 pt-0 text-muted small">No aplican cambios ni devoluciones en los siguientes casos:
+                                        <br>Maquillaje abierto o usado: Por estrictas normas de higiene y salud, cualquier producto de maquillaje que haya sido abierto, probado o manipulado.
+                                        <br>Joyería usada o maltratada: Piezas que muestren señales de uso, modificaciones o daños por no seguir las recomendaciones de cuidado.
+                                        <br>Envíos externos: Cualquier producto afectado por daños, extravíos o inconvenientes derivados de envíos por paquetería externa solicitados bajo responsabilidad del cliente.
+                                        <br><b>Recuerda revisar nuestro apartado de Políticas de Entrega y Devoluciones para más detalles sobre las condiciones de tus compras.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq22">
+                                        <span class="fw-semibold text-dark">¿Qué hago si recibí un producto equivocado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq22" class="collapse"><div class="p-3 pt-0 text-muted small">¡Lamentamos mucho el inconveniente! Como verificamos tu pedido al momento de la entrega personal, te pedimos revisarlo antes de concluir el encuentro. Si notas una equivocación en ese momento o dentro de las primeras 24 horas, escríbenos de inmediato a nuestro WhatsApp de atención con la foto de tu comprobante y el producto sellado para coordinar la solución de forma prioritaria.
+                                        <br><b>Consulta los detalles de atención en nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq23">
+                                        <span class="fw-semibold text-dark">¿Qué hago si mi pedido llegó dañado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq23" class="collapse"><div class="p-3 pt-0 text-muted small">Todas nuestras entregas son personales, por lo que puedes inspeccionar tu producto de joyería o maquillaje al momento de recibirlo para confirmar que esté en perfecto estado. Si solicitaste de manera externa un servicio de paquetería ajeno a nuestra marca, recuerda que la página no realiza envíos y queda fuera de nuestro control y responsabilidad cualquier daño derivado del transporte.
+                                        <br><b>Para mayor información sobre deslinde de envíos externos, revisa nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq24">
+                                        <span class="fw-semibold text-dark">¿Qué hago si una pieza de joyería presenta un defecto?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq24" class="collapse"><div class="p-3 pt-0 text-muted small">Todos nuestros productos son completamente nuevos, sellados y rigurosamente verificados antes de su entrega. Sin embargo, garantizamos la calidad de nuestro inventario: si tu pieza presenta un defecto de origen o de lote, ponte en contacto con nosotros vía WhatsApp dentro de las primeras 24 horas tras tu entrega personal para gestionar el cambio o devolución correspondiente. 
+                                        (Nota: Los cambios o devoluciones no aplican si el cliente solicitó de manera externa un envío por paquetería ajeno a nuestro servicio de entrega personal).
+                                        <br><b>Consulta los términos exactos en nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq25">
+                                        <span class="fw-semibold text-dark">¿Puedo devolver maquillaje que ya fue abierto o utilizado?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq25" class="collapse"><div class="p-3 pt-0 text-muted small">No. Por estrictas normas de salud e higiene, no se aceptan cambios ni devoluciones en ningún producto de maquillaje que haya sido abierto, probado o utilizado, salvo que se reporte un defecto de origen o de lote dentro del plazo permitido (24 horas tras la entrega).
+                                        Si el producto se mantiene completamente sellado y se debió a una confusión al elegir el tono o producto, escríbenos por WhatsApp para brindarte atención especializada y revisar qué solución podemos ofrecerte.
+                                        <br><b>Para conocer más sobre nuestras normativas de higiene, te invitamos a consultar nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq26">
+                                        <span class="fw-semibold text-dark">¿Cuánto tiempo tengo para solicitar una devolución?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq26" class="collapse"><div class="p-3 pt-0 text-muted small">Debido a que nuestras entregas se realizan de manera personal y coordinada, contaremos con un lapso máximo de 1 día (24 horas) posterior a la entrega para recibir cualquier consulta especializada, aclaración o reporte por defecto de lote.</div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq27">
+                                        <span class="fw-semibold text-dark">¿Cómo recibiré mi reembolso?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq27" class="collapse"><div class="p-3 pt-0 text-muted small">Una vez revisada y aprobada tu solicitud de devolución o cancelación por WhatsApp, el reembolso se procesará utilizando el mismo método de pago con el que realizaste tu compra. El tiempo para que el saldo se refleje en tu cuenta dependerá de la institución bancaria o plataforma utilizada.
+                                        <br><b>Para conocer más sobre tiempos de procesamiento y condiciones de reembolso, consulta nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded-3 border faq-card overflow-hidden">
+                                    <button class="btn w-100 p-3 bg-transparent border-0 d-flex justify-content-between align-items-center text-start shadow-none faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mFaq28">
+                                        <span class="fw-semibold text-dark">¿Quién cubre el costo de envío cuando solicito una devolución?</span>
+                                        <span class="faq-toggle-icon ms-2"></span>
+                                    </button>
+                                    <div id="mFaq28" class="collapse"><div class="p-3 pt-0 text-muted small">Dado que nuestro modelo de entrega opera de forma personal en los puntos y estaciones acordadas (Metro y Metrobús), no hay costos de envío que cubrir para las entregas o devoluciones gestionadas directamente con nosotros. Si la devolución es procedente, el cambio o revisión se coordina en uno de nuestros puntos de entrega autorizados.
+                                        (Nota: Si decidiste contratar de manera externa una paquetería o servicio de envío ajeno a nuestra marca, dichos costos corren al 100% bajo tu propia cuenta y responsabilidad).
+                                        <br><b>Para más detalles sobre los puntos de entrega y deslinde de envíos externos, consulta nuestro apartado de Políticas de Entrega y Devoluciones.</b></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                    <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 4: GUÍA COMPLETA DE TALLAS EXTENDIDA -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="allTallasModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <div>
+                        <h1 class="modal-title h4 fw-bold text-dark">Guía Completa de Tallas</h1>
+                        <p class="text-muted small mb-0">Tabla universal de medidas desde niñas hasta mujeres adultas.</p>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Tabla Universal de Anillos (Todas las edades)</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-striped table-bordered text-center align-middle small">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Talla</th>
+                                    <th>Diámetro Int. (mm)</th>
+                                    <th>Circunferencia (mm)</th>
+                                    <th>Talla US</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td rowspan="2" class="fw-bold bg-light">Niñas / Infantil</td><td>1</td><td>12.8 mm</td><td>40.2 mm</td><td>1 US</td></tr>
+                                <tr><td>2</td><td>13.6 mm</td><td>42.7 mm</td><td>2 US</td></tr>
+                                <tr><td rowspan="2" class="fw-bold bg-light">Juvenil / Adolescente</td><td>3</td><td>14.1 mm</td><td>44.3 mm</td><td>3 US</td></tr>
+                                <tr><td>4</td><td>14.9 mm</td><td>46.8 mm</td><td>4 US</td></tr>
+                                <tr><td rowspan="5" class="fw-bold bg-light">Mujer Adulta (Estándar)</td><td>5</td><td>15.7 mm</td><td>49.3 mm</td><td>5 US</td></tr>
+                                <tr><td>6</td><td>16.5 mm</td><td>51.8 mm</td><td>6 US</td></tr>
+                                <tr><td>7</td><td>17.3 mm</td><td>54.4 mm</td><td>7 US</td></tr>
+                                <tr><td>8</td><td>18.1 mm</td><td>56.9 mm</td><td>8 US</td></tr>
+                                <tr><td>9</td><td>18.9 mm</td><td>59.5 mm</td><td>9 US</td></tr>
+                                <tr><td rowspan="2" class="fw-bold bg-light">Medidas Especiales</td><td>10</td><td>19.8 mm</td><td>62.1 mm</td><td>10 US</td></tr>
+                                <tr><td>11</td><td>20.6 mm</td><td>64.7 mm</td><td>11 US</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                    <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 5: CUIDADOS DEL ORO (4 IMÁGENES) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalOro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-body px-4 pt-4">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <h2 class="h4 fw-bold text-dark m-0 text-uppercase border-bottom border-2 border-dark pb-1 d-inline-block">ORO</h2>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center g-4 mb-4">
+                        <div class="col-md-6">
+                            <div id="carouselOro" class="carousel slide auto-stop-carousel rounded-3 overflow-hidden shadow-sm bg-light" data-bs-ride="carousel" data-bs-interval="5000" data-bs-wrap="false">
+                                <div class="carousel-inner text-center">
+                                    <div class="carousel-item active">
+                                        <img src="Img/aretes-oro.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Pulsera de Oro" onerror="this.src='https://via.placeholder.com/400x250?text=Pulsera+de+Oro'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="Img/collar-oro.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Aretes de Oro" onerror="this.src='https://via.placeholder.com/400x250?text=Aretes+de+Oro'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="Img/pulsera-oro.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Collar de Oro" onerror="this.src='https://via.placeholder.com/400x250?text=Collar+de+Oro'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="Img/anillos-oro.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Anillos de Oro" onerror="this.src='https://via.placeholder.com/400x250?text=Anillos+de+Oro+(Mas+Vendido)'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h3 class="h5 fw-bold text-dark mb-2">¿Por qué elegir piezas de Oro?</h3>
+                            <p class="small text-muted mb-3">
+                                El oro es el metal precioso por excelencia. No se oxida, no se corroe ni pierde su valor con el paso del tiempo. Elegir una pieza de oro garantiza elegancia atemporal, alta resistencia al uso diario y un acabado hipoalergénico ideal para pieles sensibles.
+                            </p>
+                            <span class="badge bg-warning text-dark font-monospace">Inversión y Estilo Duradero</span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3 pb-3">
+                        <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-shield-heart me-2 text-vino"></i>Formas de cuidado y mantenimiento</h3>
+                        <div class="row g-3 small text-muted">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">🏠 Limpieza casera:</strong>
+                                    Sumerge la pieza en agua tibia con unas gotas de jabón neutro durante 10 minutos. Talla suavemente con un cepillo de cerdas muy suaves y seca con un paño de microfibra sin frotar bruscamente.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">✨ Tratamiento especializado:</strong>
+                                    Lleva tus piezas una vez al año a servicio de pulido técnico o baño ultrasónico para eliminar microrrayaduras y recuperar el brillo original espejo.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 6: CUIDADOS DE LA PLATA .925 (4 IMÁGENES) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalPlata" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-body px-4 pt-4">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <h2 class="h4 fw-bold text-dark m-0 text-uppercase border-bottom border-2 border-dark pb-1 d-inline-block">PLATA .925</h2>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center g-4 mb-4">
+                        <div class="col-md-6">
+                            <div id="carouselPlata" class="carousel slide auto-stop-carousel rounded-3 overflow-hidden shadow-sm bg-light" data-bs-ride="carousel" data-bs-interval="5000" data-bs-wrap="false">
+                                <div class="carousel-inner text-center">
+                                    <div class="carousel-item active">
+                                        <img src="img/anillos-plata.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Pulsera de Plata" onerror="this.src='https://via.placeholder.com/400x250?text=Pulsera+de+Plata'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/aretes-plata.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Aretes de Plata" onerror="this.src='https://via.placeholder.com/400x250?text=Aretes+de+Plata'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/collar-plata.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Anillo de Plata" onerror="this.src='https://via.placeholder.com/400x250?text=Anillo+de+Plata'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/pulsera-plata.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Collar de Plata" onerror="this.src='https://via.placeholder.com/400x250?text=Collar+de+Plata+(Mas+Vendido)'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h3 class="h5 fw-bold text-dark mb-2">¿Por qué elegir Plata .925?</h3>
+                            <p class="small text-muted mb-3">
+                                La plata ley .925 destaca por su brillo característico, adaptabilidad y sofisticación en cualquier estilo. Es la opción ideal para lucir piezas de alta joyería con una excelente relación calidad-precio.
+                            </p>
+                            <span class="badge bg-secondary text-white font-monospace">Versatilidad e Iluminación</span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3 pb-3">
+                        <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-shield-heart me-2 text-vino"></i>Formas de cuidado y mantenimiento</h3>
+                        <div class="row g-3 small text-muted">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">🏠 Limpieza casera:</strong>
+                                    Usa un paño franela especial para plata previamente tratado. Guarda tus piezas en bolsas herméticas de franela para evitar la sulfatación natural provocada por el contacto con el aire y la humedad.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">✨ Tratamiento especializado:</strong>
+                                    Aplica pasta limpiadora neutra o líquido sumergible especial para joyas de plata para eliminar instantáneamente la capa oscura de oxidación.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 7: CUIDADOS DE PIEDRAS Y PERLAS (4 IMÁGENES) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalPiedras" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-body px-4 pt-4">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <h2 class="h4 fw-bold text-dark m-0 text-uppercase border-bottom border-2 border-dark pb-1 d-inline-block">PIEDRAS Y PERLAS</h2>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center g-4 mb-4">
+                        <div class="col-md-6">
+                            <div id="carouselPiedras" class="carousel slide auto-stop-carousel rounded-3 overflow-hidden shadow-sm bg-light" data-bs-ride="carousel" data-bs-interval="5000" data-bs-wrap="false">
+                                <div class="carousel-inner text-center">
+                                    <div class="carousel-item active">
+                                        <img src="img/pulsera-piedras.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Pulsera con Gemas" onerror="this.src='https://via.placeholder.com/400x250?text=Pulsera+con+Gemas'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/anillos-piedras.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Aretes de Perlas" onerror="this.src='https://via.placeholder.com/400x250?text=Aretes+de+Perlas'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/collar-piedras.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Anillo con Piedra" onerror="this.src='https://via.placeholder.com/400x250?text=Anillo+con+Piedra'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/aretes-piedras.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Collar de Perlas" onerror="this.src='https://via.placeholder.com/400x250?text=Collar+de+Perlas+(Mas+Vendido)'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h3 class="h5 fw-bold text-dark mb-2">¿Por qué elegir Gemas y Perlas?</h3>
+                            <p class="small text-muted mb-3">
+                                Aportan un toque de color, distinción y singularidad orgánica a cualquier conjunto. Cada piedra fina y perla cultivada posee tonos y matices irrepetibles que convierten cada pieza en una obra única.
+                            </p>
+                            <span class="badge bg-info text-dark font-monospace">Exclusividad y Naturaleza</span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3 pb-3">
+                        <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-shield-heart me-2 text-vino"></i>Formas de cuidado y mantenimiento</h3>
+                        <div class="row g-3 small text-muted">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">🏠 Limpieza casera:</strong>
+                                    Limpia con un paño ligeramente humedecido únicamente en agua destilada. Evita sumergir las perlas en agua o aplicarles perfumes directo, ya que los ácidos dañan el nácar.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">✨ Tratamiento especializado:</strong>
+                                    Realiza un reensartado periódico de collares de perlas con hilo de seda de nudos de seguridad para evitar caídas o fricción entre las gemas.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 8: CUIDADOS DEL ORO LAMINADO / ACERO (4 IMÁGENES) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalAcero" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-body px-4 pt-4">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <h2 class="h4 fw-bold text-dark m-0 text-uppercase border-bottom border-2 border-dark pb-1 d-inline-block">ORO LAMINADO / ACERO</h2>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center g-4 mb-4">
+                        <div class="col-md-6">
+                            <div id="carouselAcero" class="carousel slide auto-stop-carousel rounded-3 overflow-hidden shadow-sm bg-light" data-bs-ride="carousel" data-bs-interval="5000" data-bs-wrap="false">
+                                <div class="carousel-inner text-center">
+                                    <div class="carousel-item active">
+                                        <img src="img/anillos-acero.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Aretes Acero" onerror="this.src='https://via.placeholder.com/400x250?text=Aretes+Laminados'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/aretes-acero.jpeg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Collar Acero" onerror="this.src='https://via.placeholder.com/400x250?text=Collar+Laminado'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/pulsera-acero.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Anillo Acero" onerror="this.src='https://via.placeholder.com/400x250?text=Anillo+Laminado'">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="img/collar-acero.jpg" class="img-fluid w-100 object-fit-cover" style="height: 250px;" alt="Pulsera Acero" onerror="this.src='https://via.placeholder.com/400x250?text=Pulsera+de+Acero+(Mas+Vendido)'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h3 class="h5 fw-bold text-dark mb-2">¿Por qué elegir Oro Laminado / Acero?</h3>
+                            <p class="small text-muted mb-3">
+                                Es la alternativa moderna más resistente a rayaduras, agua y sudor. Ofrece la misma apariencia lujosa del oro macizo con una durabilidad excepcional para actividades al aire libre y uso diario continuo.
+                            </p>
+                            <span class="badge bg-dark text-white font-monospace">Inoxidable e Hipoalergénico</span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3 pb-3">
+                        <h3 class="h6 fw-bold text-dark mb-3"><i class="bi bi-shield-heart me-2 text-vino"></i>Formas de cuidado y mantenimiento</h3>
+                        <div class="row g-3 small text-muted">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">🏠 Limpieza casera:</strong>
+                                    Lavar con agua templada y jabón líquido suave. Secar muy bien con una toalla suave para evitar marcas de gotas de agua retenida.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border h-100">
+                                    <strong class="text-dark d-block mb-1">✨ Tratamiento especializado:</strong>
+                                    Evita raspar con materiales abrasivos o fibras metálicas. Guarda las piezas separadas para preservar la capa protectora del laminado impecable por años.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 9: GUÍA DE MEDICIÓN DE DEDO (SOLO IMAGEN) -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalMedida" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0 shadow-none">
+                <div class="modal-body text-center p-0 position-relative">
+                    <img src="Img/Cómo medir tu dedoG.jpeg" alt="Guía detallada de medición" class="img-fluid rounded-4 shadow-lg w-100" onerror="this.src='https://via.placeholder.com/800x600?text=Guia+Detallada+Medicion'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script de control para carruseles y ambos navegadores ajustados -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const carousels = document.querySelectorAll('.auto-stop-carousel');
+            carousels.forEach(carouselEl => {
+                carouselEl.addEventListener('slid.bs.carousel', function (e) {
+                    const totalItems = carouselEl.querySelectorAll('.carousel-item').length;
+                    if (e.to === totalItems - 1) {
+                        const bsCarousel = bootstrap.Carousel.getInstance(carouselEl);
+                        if (bsCarousel) {
+                            bsCarousel.pause();
+                        }
+                    }
+                });
+            });
+            FPStore.updateUI();
+        });
+
+        // 1. Buscador Global de la Página (Header)
+        function handleHeaderSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('headerSearchInput').value.toLowerCase().trim();
+            if (!query) return;
+
+            if (query.includes('oferta') || query.includes('tienda')) {
+                window.location.href = 'tienda.html';
+            } else if (query.includes('inicio') || query.includes('home')) {
+                window.location.href = 'index.html';
+            } else if (query.includes('nosotros') || query.includes('quienes')) {
+                window.location.href = 'nosotros.html';
+            } else if (query.includes('medida') || query.includes('talla')) {
+                document.getElementById('tallas-section').scrollIntoView({ behavior: 'smooth' });
+            } else if (query.includes('politica') || query.includes('envio') || query.includes('devolucion')) {
+                document.getElementById('politicas-section').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.location.href = `tienda.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // 2. Buscador del Centro de Ayuda (Abre modal de las 28 preguntas y restablece/filtra resultados)
+        function handleHelpSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('helpSearchInput').value.toLowerCase().trim();
+            
+            // Abrir el modal con todas las preguntas
+            const allFaqModalEl = document.getElementById('allFaqModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(allFaqModalEl);
+            modal.show();
+
+            // Filtrar o restablecer todas las preguntas según el texto de búsqueda
+            const faqItems = allFaqModalEl.querySelectorAll('.modal-body .bg-light.rounded-3.border.faq-card');
+            faqItems.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                const parentCol = card.closest('.col-12');
+                if (parentCol) {
+                    if (!query || text.includes(query)) {
+                        parentCol.style.display = ''; // Restablece y muestra la pregunta
+                        if (query) {
+                            const collapseEl = card.querySelector('.collapse');
+                            if (collapseEl) {
+                                const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseEl, {toggle: false});
+                                bsCollapse.show();
+                            }
+                        }
+                    } else {
+                        parentCol.style.display = 'none'; // Oculta las que no coinciden
+                    }
+                }
+            });
+        }
+    </script>
+
+    <!-- ========================================== -->
+    <!-- SCRIPT HOMOLOGADO: CARRITO Y FAVORITOS (SESSIONSTORAGE) -->
+    <!-- ========================================== -->
+    <script>
+        const FPStore = {
+            getCart: () => JSON.parse(sessionStorage.getItem('fp_cart')) || [],
+            saveCart: (cart) => sessionStorage.setItem('fp_cart', JSON.stringify(cart)),
+            getFavorites: () => JSON.parse(sessionStorage.getItem('fp_favorites')) || [],
+            saveFavorites: (favs) => sessionStorage.setItem('fp_favorites', JSON.stringify(favs)),
+
+            addToCart: (product) => {
+                let cart = FPStore.getCart();
+                let existing = cart.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            incrementQuantity: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                let item = cart.find(i => i.id === id);
+                if (item) {
+                    item.quantity += 1;
+                    FPStore.saveCart(cart);
+                    FPStore.updateUI();
+                }
+            },
+
+            removeFromCart: (id, event) => {
+                if (event) event.stopPropagation();
+                let cart = FPStore.getCart();
+                cart = cart.filter(item => item.id !== id);
+                FPStore.saveCart(cart);
+                FPStore.updateUI();
+            },
+
+            toggleFavorite: (product, event) => {
+                if (event) event.stopPropagation();
+                let favs = FPStore.getFavorites();
+                let index = favs.findIndex(item => item.id === product.id);
+                if (index > -1) {
+                    favs.splice(index, 1);
+                } else {
+                    favs.push(product);
+                }
+                FPStore.saveFavorites(favs);
+                FPStore.updateUI();
+            },
+
+            updateUI: () => {
+                const cart = FPStore.getCart();
+                const favs = FPStore.getFavorites();
+
+                document.querySelectorAll('.cart-count').forEach(el => el.textContent = cart.reduce((sum, i) => sum + i.quantity, 0));
+                document.querySelectorAll('.fav-count').forEach(el => el.textContent = favs.length);
+
+                const cartContainer = document.getElementById('cart-items-container');
+                const cartSummary = document.getElementById('cart-summary-container');
+
+                if (cartContainer) {
+                    if (cart.length === 0) {
+                        cartContainer.innerHTML = `<p class="text-muted text-center py-3 small m-0">Tu carrito está vacío. Explora la <a href="tienda.html" class="text-dark fw-bold">Tienda</a>.</p>`;
+                        if (cartSummary) cartSummary.classList.add('d-none');
+                    } else {
+                        let totalSum = 0;
+                        cartContainer.innerHTML = cart.map(item => {
+                            const itemSubtotal = item.price * item.quantity;
+                            totalSum += itemSubtotal;
+                            const category = item.category || 'General';
+
+                            return `
+                                <div class="py-2 border-bottom" onclick="event.stopPropagation();">
+                                    <div class="d-flex align-items-start justify-content-between gap-2">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <div class="fw-bold text-dark d-flex align-items-center">
+                                                <span class="text-truncate" title="${item.name}">${item.name}</span>
+                                                ${item.quantity > 1 ? `<span class="badge bg-secondary rounded-pill ms-1 flex-shrink-0" style="font-size: 0.65rem;">x${item.quantity}</span>` : ''}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">Categoría: ${category}</div>
+                                        </div>
+                                        <div class="text-end flex-shrink-0" style="width: 110px; min-width: 110px; white-space: nowrap;">
+                                            <span class="fw-bold text-dark d-block small">$${itemSubtotal.toFixed(2)} MXN</span>
+                                        </div>
+                                        <div class="btn-group btn-group-sm flex-shrink-0">
+                                            <button class="btn btn-outline-dark px-2" onclick="FPStore.incrementQuantity('${item.id}', event)" title="Añadir 1 producto más"><i class="bi bi-plus-lg"></i></button>
+                                            <button class="btn btn-outline-danger px-2" onclick="FPStore.removeFromCart('${item.id}', event)" title="Eliminar producto"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        if (cartSummary) {
+                            cartSummary.classList.remove('d-none');
+                            const iva = totalSum * 0.16;
+                            document.getElementById('cart-iva-amount').textContent = `$${iva.toFixed(2)} MXN`;
+                            document.getElementById('cart-total-amount').textContent = `$${totalSum.toFixed(2)} MXN`;
+                        }
+                    }
+                }
+
+                const favContainer = document.getElementById('fav-items-container');
+                if (favContainer) {
+                    if (favs.length === 0) {
+                        favContainer.innerHTML = `<p class="text-muted text-center py-2 small m-0">No hay favoritos guardados.</p>`;
+                    } else {
+                        favContainer.innerHTML = favs.map(item => `
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom" onclick="event.stopPropagation();">
+                                <span class="text-truncate me-2 small text-muted" style="max-width: 150px;" title="${item.name}">${item.name}</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-dark p-1 me-1" title="Añadir al carrito" onclick="FPStore.addToCart({id: '${item.id}', name: '${item.name}', price: ${item.price}, category: '${item.category || 'General'}'}); event.stopPropagation();"><i class="bi bi-bag-plus"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger p-1" title="Eliminar de favoritos" onclick="FPStore.toggleFavorite({id: '${item.id}'}, event)"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            },
+
+            checkoutWhatsApp: (phone = "5215500000000") => {
+                const cart = FPStore.getCart();
+                if (cart.length === 0) {
+                    alert("Tu carrito está vacío.");
+                    return;
+                }
+                let total = 0;
+                let message = "Hola, me gustaría realizar el pedido de los siguientes artículos de FP Essentials:%0A";
+                cart.forEach((item, index) => {
+                    const subtotal = item.price * item.quantity;
+                    total += subtotal;
+                    message += `%0A${index + 1}. *${item.name}* (Cantidad: ${item.quantity}) - Cat: ${item.category || 'General'} - $${subtotal.toFixed(2)} MXN`;
+                });
+                const iva = total * 0.16;
+                message += `%0A%0A*I.V.A. (16% incl.):* $${iva.toFixed(2)} MXN`;
+                message += `%0A*Total de la compra:* $${total.toFixed(2)} MXN`;
+                window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+            }
+        };
+    </script>
+</body>
+</html>
